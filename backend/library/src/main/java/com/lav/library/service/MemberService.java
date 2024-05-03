@@ -85,4 +85,19 @@ public class MemberService {
     }
     
     
+    public boolean deleteMember(Long id){
+        
+        Optional<Member> optionalMember = memberRepository.findById(id);
+        if(!optionalMember.isPresent())        
+            return false;
+            
+        
+        memberRepository.deleteById(id);
+            
+        return true;
+        
+        
+    }
+    
+    
 }

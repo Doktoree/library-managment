@@ -16,6 +16,7 @@ import org.springframework.data.domain.Example;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -142,6 +143,16 @@ public class MemberController {
              return ResponseEntity.badRequest().body("There are no members!");
          
          return ResponseEntity.ok(memberDtos);
+         
+     }
+     
+     @DeleteMapping("{id}")
+     public ResponseEntity<String> deleteMember(@PathVariable Long id){
+         
+         if(!memberService.deleteMember(id))
+             return ResponseEntity.badRequest().body("There is no member with the given ID!");
+         
+         return ResponseEntity.ok("Member is succesfully deleted!");
          
      }
 
