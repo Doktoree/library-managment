@@ -8,6 +8,7 @@ import com.lav.library.domain.Member;
 import com.lav.library.dto.MemberDto;
 import com.lav.library.mapper.MemberMapper;
 import com.lav.library.repository.MemberRepository;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,8 +30,22 @@ public class MemberService {
         return MemberMapper.mapToMemberDto(createdMember);
     }
     
-    public MemberDto saveMember(MemberDto memberDto){
+    public MemberDto saveMember(MemberDto memberDto, Long id){
         
+        Optional<Member> optionalMember = memberRepository.findById(id);
+        
+        if(optionalMember.isPresent()){
+            
+            Member updatedMember = optionalMember.get();
+            updatedMember.setFirstName(memberDto.getFirstName());
+            updatedMember.setLastName(memberDto.getLastName());
+            updatedMember.setAdress(memberDto.getAdress());
+            updatedMember.setPhoneNumber(memberDto.getPhoneNumber());
+            updatedMember.setBirthDate(memberDto.getBirthDate());
+            
+            Member savedMember = memberRepository.save(updatedMember);
+            return MemberMapper.mapToMemberDto(savedMember);
+        }
         
         return null;
         

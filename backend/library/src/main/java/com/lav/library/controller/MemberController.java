@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,9 +33,10 @@ public class MemberController {
     public ResponseEntity<?> createMember(@RequestBody MemberDto memberDto) {
 
         String validationMessage = validateMemberDto(memberDto);
-        
-        if(validationMessage != null)
+
+        if (validationMessage != null) {
             return ResponseEntity.badRequest().body(validationMessage);
+        }
 
         MemberDto createdMemberDto = memberService.createMember(memberDto);
 
@@ -42,7 +45,7 @@ public class MemberController {
     }
 
     private String validateMemberDto(MemberDto memberDto) {
-        
+
         if (memberDto.getFirstName() == null || memberDto.getLastName() == null || memberDto.getBirthDate() == null
                 || memberDto.getAdress() == null || memberDto.getPhoneNumber() == null) {
 
@@ -78,10 +81,26 @@ public class MemberController {
             return "Phone number should not be empty!";
 
         }
-        
+
         return null;
     }
-    
-    
+
+    @PatchMapping("{id}")
+    public ResponseEntity<?> saveMember(@PathVariable Long id, @RequestBody MemberDto memberDto) {
+
+        String validationMessage = validateMemberDto(memberDto);
+
+        if (validationMessage != null) {
+            return ResponseEntity.badRequest().body(validationMessage);
+        }
+
+        MemberDto savedMemberDto = memberService.saveMember(memberDto, id);
+
+        if (savedMemberDto == null) {
+            return ResponseEntity.badRequest().body("There is no member with the given ID!");
+        }
+
+        return ResponseEntity.ok(savedMemberDto);
+    }
 
 }
