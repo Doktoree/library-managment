@@ -62,5 +62,27 @@ public class MemberService {
         return memberDtos;
     }
     
+    public MemberDto getMember(Long id){
+        
+        Optional<Member> optionalMember = memberRepository.findById(id);
+        
+        if(optionalMember.isPresent()){
+            
+            Member member = optionalMember.get();
+            MemberDto memberDto = MemberMapper.mapToMemberDto(member);
+            return memberDto;
+            
+        }
+        
+        return null;
+    }
+    
+    public List<MemberDto> getAllMembers(){
+        
+        List<Member> allMembers = memberRepository.findAll();
+        
+        return allMembers.stream().map(MemberMapper::mapToMemberDto).collect(Collectors.toList());
+    }
+    
     
 }

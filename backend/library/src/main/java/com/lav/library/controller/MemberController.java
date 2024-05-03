@@ -120,5 +120,29 @@ public class MemberController {
          return ResponseEntity.ok(memberDtos);
          
     }
+     
+     @GetMapping("{id}")
+     public ResponseEntity<?> getMember(@PathVariable Long id){
+         
+         MemberDto memberDto = memberService.getMember(id);
+         
+         if(memberDto==null)
+             return ResponseEntity.badRequest().body("There is no member with the given ID!");
+         
+         return ResponseEntity.ok(memberDto);
+         
+     }
+     
+     @GetMapping
+     public ResponseEntity<?> getAllMembers(){
+         
+         List<MemberDto> memberDtos = memberService.getAllMembers();
+         
+         if(memberDtos == null)
+             return ResponseEntity.badRequest().body("There are no members!");
+         
+         return ResponseEntity.ok(memberDtos);
+         
+     }
 
 }
