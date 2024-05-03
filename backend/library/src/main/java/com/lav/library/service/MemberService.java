@@ -8,8 +8,11 @@ import com.lav.library.domain.Member;
 import com.lav.library.dto.MemberDto;
 import com.lav.library.mapper.MemberMapper;
 import com.lav.library.repository.MemberRepository;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 /**
@@ -49,6 +52,14 @@ public class MemberService {
         
         return null;
         
+    }
+    
+    public List<MemberDto> getMembers(MemberDto memberDto){
+        
+        Member member = MemberMapper.mapToMember(memberDto);
+        List<Member> members = memberRepository.findAll(Example.of(member));
+        List<MemberDto> memberDtos = members.stream().map(MemberMapper::mapToMemberDto).collect(Collectors.toList());
+        return memberDtos;
     }
     
     
