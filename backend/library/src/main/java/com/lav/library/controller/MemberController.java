@@ -73,7 +73,7 @@ public class MemberController {
 
         if (!(memberDto.getBirthDate() instanceof LocalDate) || memberDto.getBirthDate().isAfter(LocalDate.now())) {
 
-            return "Birth date must be a valid date in the past.";
+            return "Birth date must be a valid date in the past!";
 
         }
 
