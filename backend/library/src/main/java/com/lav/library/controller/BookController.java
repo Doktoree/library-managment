@@ -7,6 +7,7 @@ package com.lav.library.controller;
 import com.lav.library.domain.Fiction;
 import com.lav.library.dto.BookDto;
 import com.lav.library.dto.FictionDto;
+import com.lav.library.dto.MemberDto;
 import com.lav.library.dto.ProfessionalLiteratureDto;
 import com.lav.library.service.BookService;
 import com.lav.library.service.FictionService;
@@ -18,7 +19,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -117,6 +121,38 @@ public class BookController {
             return "Won prizes should not be empty!";
         
         return null;
+    }
+    
+    @PatchMapping("/pliterature/{id}")
+    public ResponseEntity<?> saveBook(@RequestBody ProfessionalLiteratureDto dto, @PathVariable Long id){
+        
+//        String validateMessage = validate(dto);
+//        
+//        if(validateMessage != null)
+//            return ResponseEntity.badRequest().body(validateMessage);
+        
+        ProfessionalLiteratureDto plDto = plService.saveProfessionalLiterature(id, dto);
+        
+
+        if (plDto == null) {
+            return ResponseEntity.badRequest().body("There is no book with the given ID!");
+        }
+        
+        return ResponseEntity.ok(plDto);
+    }
+    
+    
+    @PatchMapping("/fiction/{id}")
+    public ResponseEntity<?> saveBook(@RequestBody FictionDto dto, @PathVariable Long id){
+        
+        FictionDto fictionDto = fictionService.saveFiction(id, dto);
+        
+
+        if (fictionDto == null) {
+            return ResponseEntity.badRequest().body("There is no book with the given ID!");
+        }
+        
+        return ResponseEntity.ok(fictionDto);
     }
     
 }

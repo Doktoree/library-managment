@@ -21,6 +21,7 @@ import com.lav.library.repository.BookRepository;
 import com.lav.library.repository.ProfessionalLiteratureRepository;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import javax.crypto.AEADBadTagException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -83,6 +84,51 @@ public class ProfessionalLiteratureService {
 
         return authors.get(0);
 
+    }
+    
+    public ProfessionalLiteratureDto saveProfessionalLiterature(Long id, ProfessionalLiteratureDto dto){
+        Optional<ProfessionalLiterature> optionalPl = plRepository.findById(id);
+        Optional<Book> optionalBook = bookRepository.findById(id);
+        
+        if(optionalPl.isPresent() && optionalBook.isPresent()){
+            
+            ProfessionalLiterature updatedPl = optionalPl.get();
+            updatedPl.setScientificArea(dto.getScientificArea());
+            Book updatedBook = optionalBook.get();
+            updatedBook.setName(dto.getName());
+            updatedBook.setTaken(dto.isTaken());
+            updatedBook.setYear(dto.getYear());
+            ProfessionalLiterature savedPl = plRepository.save(updatedPl);
+            Book savedBook = bookRepository.save(updatedBook);
+            
+            List<BookAuthor> bookAuthors = bookAuthorRepository.findById_BookBookId(savedBook.getBookId());
+            
+            for(BookAuthor ba: bookAuthors){
+                
+                bookAuthorRepository.delete(ba);
+                
+            }
+            
+            List<Author> authors = dto.getAuthors();
+            
+            for(Author a: authors ){
+                
+                Author aut = checkAuthor(a);
+                
+                if(aut == null)
+                    aut = authorRepository.save(a);
+                
+                BookAuthorId baid = new BookAuthorId(savedBook, aut);
+                BookAuthor savedBa = bookAuthorRepository.save(new BookAuthor(baid));
+                
+            }
+            
+            return ProfessionalLiteratureMapper.mapToProfessionalLiteratureDto(savedPl, savedBook, authors);
+            
+        }
+        
+        
+        return null;
     }
 
 }

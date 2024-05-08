@@ -22,6 +22,7 @@ import com.lav.library.repository.BookRepository;
 import com.lav.library.repository.FictionRepository;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -84,6 +85,53 @@ public class FictionService {
 
         return authors.get(0);
 
+    }
+    
+    public FictionDto saveFiction(Long id, FictionDto dto){
+        Optional<Fiction> optionalFiction = fictionRepository.findById(id);
+        Optional<Book> optionalBook = bookRepository.findById(id);
+        
+        if(optionalFiction.isPresent() && optionalBook.isPresent()){
+            
+            Fiction updatedFiction = optionalFiction.get();
+            updatedFiction.setGenre(dto.getGenre());
+            updatedFiction.setTheme(dto.getTheme());
+            updatedFiction.setWonPrizes(dto.getWonPrizes());
+            Book updatedBook = optionalBook.get();
+            updatedBook.setName(dto.getName());
+            updatedBook.setTaken(dto.isTaken());
+            updatedBook.setYear(dto.getYear());
+            Fiction savedFiction = fictionRepository.save(updatedFiction);
+            Book savedBook = bookRepository.save(updatedBook);
+            
+            List<BookAuthor> bookAuthors = bookAuthorRepository.findById_BookBookId(savedBook.getBookId());
+            
+            for(BookAuthor ba: bookAuthors){
+                
+                bookAuthorRepository.delete(ba);
+                
+            }
+            
+            List<Author> authors = dto.getAuthors();
+            
+            for(Author a: authors ){
+                
+                Author aut = checkAuthor(a);
+                
+                if(aut == null)
+                    aut = authorRepository.save(a);
+                
+                BookAuthorId baid = new BookAuthorId(savedBook, aut);
+                BookAuthor savedBa = bookAuthorRepository.save(new BookAuthor(baid));
+                
+            }
+            
+            return FictionMapper.mapToFictionDto(savedFiction, savedBook, authors);
+            
+        }
+        
+        
+        return null;
     }
     
 }
