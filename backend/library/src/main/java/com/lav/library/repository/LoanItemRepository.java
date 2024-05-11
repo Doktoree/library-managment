@@ -24,4 +24,6 @@ public interface LoanItemRepository extends JpaRepository<LoanItem, LoanItemId> 
     
     //List<LoanItem> findByIdLoan(Loan loan);
     
+    List<LoanItem> findByLoan(Loan loan);
+    
 }

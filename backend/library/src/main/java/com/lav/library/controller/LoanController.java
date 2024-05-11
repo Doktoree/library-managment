@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -69,6 +71,18 @@ public class LoanController {
         }
 
         return null;
+    }
+    
+    @GetMapping("{id}")
+    public ResponseEntity<?> getLoan(@PathVariable Long id){
+        
+        LoanDto loanDto = loanService.getLoan(id);
+        
+        if(loanDto == null)
+            return ResponseEntity.badRequest().body("There is no loan with the given ID!");
+        
+        return ResponseEntity.ok(loanDto);
+        
     }
 
 }

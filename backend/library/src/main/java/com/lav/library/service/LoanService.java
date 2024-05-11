@@ -9,6 +9,7 @@ import com.lav.library.domain.Loan;
 import com.lav.library.domain.LoanItem;
 import com.lav.library.domain.Member;
 import com.lav.library.dto.LoanDto;
+import com.lav.library.dto.LoanItemDto;
 import com.lav.library.ids.LoanItemId;
 import com.lav.library.mapper.LoanItemMapper;
 import com.lav.library.mapper.LoanMapper;
@@ -81,4 +82,18 @@ public class LoanService {
         return LoanMapper.mapToLoanDto(savedLoan, member, savedLoanItems.stream().map(LoanItemMapper::mapToLoanDto).collect(Collectors.toList()));
     }
 
+    
+    public LoanDto getLoan(Long id){
+        
+        Optional<Loan> optionalLoan = loanRepository.findById(id);
+        
+        if(!optionalLoan.isPresent())
+            return null;
+        
+        Loan loan = optionalLoan.get();
+        List<LoanItem> loanItems = loanItemRepository.findByLoan(loan);
+        List<LoanItemDto> loanItemDtos = loanItems.stream().map(LoanItemMapper::mapToLoanDto).collect(Collectors.toList());
+        return LoanMapper.mapToLoanDto(loan, loan.getMember(), loanItemDtos);
+        
+    }
 }
