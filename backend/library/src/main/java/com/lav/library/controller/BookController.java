@@ -4,11 +4,13 @@
  */
 package com.lav.library.controller;
 
+import com.lav.library.domain.Author;
 import com.lav.library.domain.Fiction;
 import com.lav.library.dto.BookDto;
 import com.lav.library.dto.FictionDto;
 import com.lav.library.dto.MemberDto;
 import com.lav.library.dto.ProfessionalLiteratureDto;
+import com.lav.library.service.AuthorService;
 import com.lav.library.service.BookService;
 import com.lav.library.service.FictionService;
 import com.lav.library.service.ProfessionalLiteratureService;
@@ -18,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,6 +47,9 @@ public class BookController {
     
     @Autowired
     private FictionService fictionService;
+    
+    @Autowired
+    private AuthorService authorService;
     
     @GetMapping
     public ResponseEntity<?> getAllBooks(){
@@ -155,4 +161,25 @@ public class BookController {
         return ResponseEntity.ok(fictionDto);
     }
     
+    @GetMapping("{id}")
+    public ResponseEntity<?> getBook(@PathVariable Long id){
+        
+        List<Author> authors = authorService.getAuthorsByBookId(id);
+        Object obj = bookService.getBook(id, authors);
+        
+        if(obj == null)
+            return ResponseEntity.badRequest().body("There is no book with the given ID!");
+        
+        return ResponseEntity.ok(obj);
+    }
+    
+    @DeleteMapping("{id}")
+    public ResponseEntity<?> deleteBook(@PathVariable Long id){
+        
+        if(bookService.deleteBook(id) == false)
+            return ResponseEntity.badRequest().body("There is no book with the given ID!");
+        
+        return ResponseEntity.ok("Book is succesfully deleted!");
+        
+    }
 }
