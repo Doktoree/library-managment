@@ -7,6 +7,7 @@ package com.lav.library.service;
 import com.lav.library.domain.Author;
 import com.lav.library.domain.Book;
 import com.lav.library.domain.BookAuthor;
+import com.lav.library.domain.Fiction;
 import com.lav.library.domain.ProfessionalLiterature;
 import com.lav.library.dto.AuthorDto;
 import com.lav.library.dto.BookDto;
@@ -24,6 +25,7 @@ import java.util.List;
 import java.util.Optional;
 import javax.crypto.AEADBadTagException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 /**
@@ -131,4 +133,60 @@ public class ProfessionalLiteratureService {
         return null;
     }
 
+    
+    public List<Object> getBooks(BookDto dto){
+        
+        Book book = BookMapper.mapToBook(dto);
+        List<Book> books = bookRepository.findAll(Example.of(book));
+        List<Object> objBooks = new ArrayList<>();
+        
+        for(Book b: books){
+            
+            Optional<ProfessionalLiterature> optinalPl = plRepository.findById(b.getBookId());
+            
+            if(optinalPl.isPresent()){
+                
+                ProfessionalLiterature pl = optinalPl.get();
+                List<BookAuthor> bookAuthors = bookAuthorRepository.findById_BookBookId(b.getBookId());
+                List<Author> authors = new ArrayList<>();
+                
+                for(BookAuthor ba: bookAuthors){
+                    
+                    Optional<Author> a = authorRepository.findById(ba.getId().getAuthor().getAuthorId());
+                    authors.add(a.get());
+                }
+                
+                ProfessionalLiteratureDto plDto = ProfessionalLiteratureMapper.mapToProfessionalLiteratureDto(pl, b, authors);
+                                
+            }
+            
+            else{
+                
+                
+            
+            if(optinalPl.isPresent()){
+                
+                ProfessionalLiterature pl = optinalPl.get();
+                List<BookAuthor> bookAuthors = bookAuthorRepository.findById_BookBookId(b.getBookId());
+                List<Author> authors = new ArrayList<>();
+                
+                for(BookAuthor ba: bookAuthors){
+                    
+                    Optional<Author> a = authorRepository.findById(ba.getId().getAuthor().getAuthorId());
+                    authors.add(a.get());
+                }
+                
+                ProfessionalLiteratureDto plDto = ProfessionalLiteratureMapper.mapToProfessionalLiteratureDto(pl, b, authors);
+                                
+            }
+                
+                
+            }
+            
+            
+        }
+        
+        return null;
+    }
+    
 }
