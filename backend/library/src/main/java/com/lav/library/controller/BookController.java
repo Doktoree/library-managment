@@ -182,4 +182,17 @@ public class BookController {
         return ResponseEntity.ok("Book is succesfully deleted!");
         
     }
+    
+    @GetMapping("/search")
+    public ResponseEntity<?> getBook(@RequestBody BookDto bookDto){
+        
+        System.out.println("bookdto: " + bookDto.toString());
+        List<Object> list = bookService.getBooks(bookDto);
+        
+        if(list.size() == 0)
+            return ResponseEntity.badRequest().body("There are no books matching the given criteria!");
+        
+        return ResponseEntity.ok(list);
+        
+    }
 }

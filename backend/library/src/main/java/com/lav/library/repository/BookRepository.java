@@ -5,6 +5,7 @@
 package com.lav.library.repository;
 
 import com.lav.library.domain.Book;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -13,6 +14,12 @@ import org.springframework.stereotype.Repository;
  * @author Lav
  */
 @Repository
-public interface BookRepository extends JpaRepository<Book, Long>{
-    
+public interface BookRepository extends JpaRepository<Book, Long> {
+
+    public List<Book> findByName(String name);
+
+    public List<Book> findByYear(int year);
+
+    public List<Book> findByYearAndName(int year, String name);
+
 }

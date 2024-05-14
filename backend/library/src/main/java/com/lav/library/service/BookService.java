@@ -11,6 +11,7 @@ import com.lav.library.domain.Fiction;
 import com.lav.library.domain.ProfessionalLiterature;
 import com.lav.library.dto.AuthorDto;
 import com.lav.library.dto.BookDto;
+import com.lav.library.dto.FictionDto;
 import com.lav.library.dto.ProfessionalLiteratureDto;
 import com.lav.library.mapper.AuthroMapper;
 import com.lav.library.mapper.BookMapper;
@@ -47,6 +48,9 @@ public class BookService {
     
     @Autowired
     private BookAuthorRepository bookAuthorRepository;
+    
+    @Autowired
+    private AuthorRepository authorRepository;
     
     public List<BookDto> getAllBooks(){
         
@@ -92,29 +96,49 @@ public class BookService {
         
     }
     //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-     public List<Object> getBooks(String bookName, List<AuthorDto> authorsDto){
+     public List<Object> getBooks(BookDto bookDto){
         
-         Book book = new Book();
-         book.setName(bookName);
-         List<Book> books = new ArrayList<>();
-         List<Author> authors = authorsDto.stream().map(AuthroMapper::mapToAuthor).collect(Collectors.toList());
-         if(!book.getName().isEmpty() && book.getName() != null){            
-             books = bookRepository.findAll(Example.of(book));
+         
+         Book book = BookMapper.mapToBook(bookDto);
+         List<Book> books;
+         
+         if(book.getYear() == 0 && book.getName()== null)
+             return new ArrayList();
+         
+         if(book.getYear()!=0 && book.getName()!=null)
+             books = bookRepository.findByYearAndName(bookDto.getYear(), bookDto.getName());
+         
+         else if(book.getYear()!=0)
+             books = bookRepository.findByYear(bookDto.getYear());
+         else
+             books = bookRepository.findByName(bookDto.getName());
+         
+        
+         List<Object> list = new ArrayList<>();
+         
+         for(Book b: books){
+             
+             Optional<ProfessionalLiterature> optionalPl = plRepo.findById(b.getBookId());
+             if(optionalPl.isPresent()){
+                 ProfessionalLiterature pl = optionalPl.get();
+                 List<Author> authors = getAuthorsByBookId(pl.getId());
+                 ProfessionalLiteratureDto dto = ProfessionalLiteratureMapper.mapToProfessionalLiteratureDto(pl, book, authors);
+                 list.add(dto);
+                 
+             }
+             else{
+                 Optional<Fiction> optionalFiction = fictionRepository.findById(b.getBookId());
+                 Fiction fiction = optionalFiction.get();
+                 List<Author> authors = getAuthorsByBookId(fiction.getId());
+                 FictionDto fictionDto = FictionMapper.mapToFictionDto(fiction, book, authors);
+                 list.add(fictionDto);
+                 
+             }
+             
          }
          
-         List<Book> goodBooks = new ArrayList<>();
-         
-         for(int i = 0; i<books.size(); i++){
-             
-             List<BookAuthor> ba = bookAuthorRepository.findById_BookBookId(book.getBookId());
-             
-             
-         }
         
-         
-         
-        
-         return null;
+         return list;
     }
     
     public boolean deleteBook(Long id){
@@ -128,7 +152,6 @@ public class BookService {
         
         if(book.isTaken()){
          
-            System.out.println("!!!!!!!!!!!!!!! taken");
             return false;
         }
             
@@ -137,6 +160,22 @@ public class BookService {
         
         return true;
         
+    }
+    
+    public List<Author> getAuthorsByBookId(Long id){
+        
+        List<Author> authors = new ArrayList<>();
+        List<BookAuthor> bookAuthors = bookAuthorRepository.findById_BookBookId(id);
+        
+        for(BookAuthor ba: bookAuthors){
+            
+            Optional<Author> optionalAuthor = authorRepository.findById(ba.getId().getBook().getBookId());
+            if(optionalAuthor.isPresent())
+                authors.add(optionalAuthor.get());
+            
+        }
+        
+        return authors;
     }
    
 }
