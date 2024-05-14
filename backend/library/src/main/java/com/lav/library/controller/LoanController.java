@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -98,6 +99,21 @@ public class LoanController {
             return ResponseEntity.badRequest().body("There is no member with the given ID!");
         
         return ResponseEntity.ok(dtos);
+        
+    }
+    
+    @PatchMapping("{id}")
+    public ResponseEntity<?> saveLoan(@RequestBody LoanDto loanDto, @PathVariable Long id){
+        
+        loanDto.setLoanId(id);
+        System.out.println("Loan id: " + loanDto.getLoanId() + " id: " + id);
+        LoanDto dto = loanService.saveLoan(loanDto);
+        
+        
+        if(dto == null)
+            return ResponseEntity.badRequest().body("One of ids are bad!");
+        
+        return ResponseEntity.ok(dto);
         
     }
 

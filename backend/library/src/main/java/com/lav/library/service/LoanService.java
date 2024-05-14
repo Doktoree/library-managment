@@ -122,18 +122,48 @@ public class LoanService {
         return loanDtos;
     }
     
-    public Loan saveLoan(LoanDto dto){
+    public LoanDto saveLoan(LoanDto dto){
         
+        System.out.println("!!!!!!!!!!!!! + " + dto.getLoanId());
         Member member = new Member();
         member.setMemberId(dto.getMemberId());
         Optional<Loan> optionalLoan = loanRepository.findById(LoanMapper.mapToLoan(dto, member).getLoanId());
+        List<LoanItemDto> dtos = new ArrayList<>();
         
         if(!optionalLoan.isPresent())
             return null;
         
         Loan loan = optionalLoan.get();
         
+        System.out.println("Loan: " + loan.toString());
         
-        return null;
+        List<LoanItem> loanItems = loanItemRepository.findByLoan(loan);
+        
+        for(int i = 0; i<dto.getLoanItems().size(); i++){
+            
+            for(int j = 0; j<loanItems.size(); j++){
+                
+                if(dto.getLoanItems().get(i).getLoanItemId() == loanItems.get(j).getLoanItemId()){
+                    
+                    LoanItem item = loanItems.get(j);
+                    item.setStatus(dto.getLoanItems().get(i).getStatus());
+                    LoanItem savedItem = loanItemRepository.save(item);
+                    Long bookID = savedItem.getBook().getBookId();
+                    Optional<Book> optionalBook = bookRepository.findById(bookID);
+                    Book book = optionalBook.get();
+                    book.setTaken(false);
+                    Book savedBook = bookRepository.save(book);
+                    LoanItemDto dto1 = LoanItemMapper.mapToLoanDto(savedItem);
+                    dtos.add(dto1);
+                    
+                }
+                
+            }
+            
+        }
+        
+        LoanDto loanDto = LoanMapper.mapToLoanDto(loan, member, dtos);
+        
+        return loanDto;
     }
 }

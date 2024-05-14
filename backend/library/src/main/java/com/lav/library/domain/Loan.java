@@ -17,6 +17,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.internal.build.AllowSysOut;
 
 /**
@@ -28,6 +29,7 @@ import org.hibernate.internal.build.AllowSysOut;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class Loan {
     
     @Id
