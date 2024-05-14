@@ -96,4 +96,44 @@ public class LoanService {
         return LoanMapper.mapToLoanDto(loan, loan.getMember(), loanItemDtos);
         
     }
+    
+    public List<LoanDto> getLoan(Member member){
+        
+        Optional<Member> optionalMember = memberRepository.findById(member.getMemberId());
+        
+        if(!optionalMember.isPresent())
+            return null;
+        
+        Member newMember = optionalMember.get();
+        
+        List<Loan> loans = loanRepository.findByMember(member);
+        
+        List<LoanDto> loanDtos = new ArrayList<>();
+        
+        for(Loan l: loans){
+            
+            List<LoanItem> items = loanItemRepository.findByLoan(l);
+            List<LoanItemDto> itemsDto = items.stream().map(LoanItemMapper::mapToLoanDto).collect(Collectors.toList());
+            LoanDto dto = LoanMapper.mapToLoanDto(l, newMember,itemsDto );
+            loanDtos.add(dto);
+            
+        }
+        
+        return loanDtos;
+    }
+    
+    public Loan saveLoan(LoanDto dto){
+        
+        Member member = new Member();
+        member.setMemberId(dto.getMemberId());
+        Optional<Loan> optionalLoan = loanRepository.findById(LoanMapper.mapToLoan(dto, member).getLoanId());
+        
+        if(!optionalLoan.isPresent())
+            return null;
+        
+        Loan loan = optionalLoan.get();
+        
+        
+        return null;
+    }
 }

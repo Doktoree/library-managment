@@ -5,6 +5,8 @@
 package com.lav.library.repository;
 
 import com.lav.library.domain.Loan;
+import com.lav.library.domain.Member;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -13,6 +15,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface LoanRepository extends JpaRepository<Loan, Long> {
     
-    
+    List<Loan> findByMember(Member member);
     
 }

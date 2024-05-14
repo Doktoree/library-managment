@@ -4,11 +4,13 @@
  */
 package com.lav.library.controller;
 
+import com.lav.library.domain.Member;
 import com.lav.library.dto.LoanDto;
 import com.lav.library.dto.MemberDto;
 import com.lav.library.service.LoanService;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -82,6 +84,20 @@ public class LoanController {
             return ResponseEntity.badRequest().body("There is no loan with the given ID!");
         
         return ResponseEntity.ok(loanDto);
+        
+    }
+    
+    @GetMapping
+    public ResponseEntity<?> getLoan(@RequestBody LoanDto loanDto){
+        
+        Member member = new Member();
+        member.setMemberId(loanDto.getMemberId());
+        List<LoanDto> dtos = loanService.getLoan(member);
+        
+        if(dtos == null)
+            return ResponseEntity.badRequest().body("There is no member with the given ID!");
+        
+        return ResponseEntity.ok(dtos);
         
     }
 
