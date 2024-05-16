@@ -18,7 +18,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- *
+ * Predstavlja fikciju koja može biti deo biblioteke.
+ * Fikcija je povezana sa knjigom, ima žanr, temu i informaciju o osvojenim nagradama.
  * @author Lav
  */
 @Entity
@@ -27,20 +28,35 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Fiction {
-    
+
+    /**
+     * Jedinstveni identifikator Fikcije kao Long
+     */
     @Id
     private Long id;
     
+    /**
+     * Knjiga koja predstavlja fikciju kao instanca klase Book
+     */
     @OneToOne
     @MapsId
     private Book book;
     
+    /**
+     * Zanr fikcija kao String, ne sme biti null
+     */
     @Column(nullable = false)
     private String genre;
     
+    /**
+     * Tema fikcije kao String, ne sme biti null
+     */
     @Column(nullable = false)
     private String theme;
     
+    /**
+     * Osvojene nagrade kao String, ne sme biti null
+     */
     @Column(name = "won_prizes", nullable = false)
     private String wonPrizes;
     

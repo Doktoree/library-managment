@@ -20,8 +20,10 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- *
- * @author Lav
+ * Predstavlja clana biblioteke
+ * Clan ima id, ime, prezime, adresu, broj telefona i datum rodjenja
+ * 
+ * @author Lav Jovanovic
  */
 @Entity
 @Getter
@@ -31,26 +33,48 @@ import lombok.ToString;
 @ToString
 public class Member {
     
+    /**
+     * Jedinstveni identifikator Clana kao Long
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id", columnDefinition = "BIGINT UNSIGNED")
     private Long memberId;
     
+    /**
+     * Ime clana kao String, ne sme biti null
+     */
+    
     @Column(name = "first_name", nullable = false)
     private String firstName;
     
+    /**
+     * Prezime clana kao String, ne sme biti null
+     */
     @Column(name = "last_name", nullable = false)
     private String lastName;
     
+    /**
+     * Adresa clana kao String, ne sme biti null
+     */
     @Column(nullable = false)
     private String adress;
     
+    /**
+     * Broj telefona clan kao String, ne sme biti null
+     */
     @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
     
+    /**
+     * Datum rodjenja clana kao LocalDate, ne sme biti null
+     */
     @Column(name = "birth_date", nullable = false)
     private LocalDate birthDate;
     
+    /**
+     * Set zaduzenja koji su povezani sa clanom
+     */
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private Set<Loan> loans;
     

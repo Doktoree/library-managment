@@ -23,8 +23,10 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- *
- * @author Lav
+ * Predstavlja stavku zaduzenja koja se nalazi u zaduzenju
+ * Stavka zaduzenja ima id, zaduzenje, status i knjigu
+ * 
+ * @author Lav Jovanovic
  */
 @Entity
 @Getter
@@ -36,19 +38,31 @@ import lombok.ToString;
 @IdClass(LoanItemId.class)
 public class LoanItem {
 
+    /**
+     * Jedinstveni identifikator stavke zaduzenja kao Long
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "loan_item_id")
     private Long loanItemId;
     
+    /**
+     * Zaduzenje u kome se nalazi stavka zaduzenja kao instanca klase Loan
+     */
     @Id
     @ManyToOne
     @JoinColumn(name = "loan_id")
     private Loan loan;
     
-    
+    /**
+     * Status knjige kao String
+     */
     private String status = "not returned";
 
+    /**
+     * Knjiga koja se nalazi u stavci zaduzenja kao instanca klase Book, ne sme biti null
+     */
+    
     @ManyToOne
     @JoinColumn(name = "book_id", nullable = false)
     private Book book;

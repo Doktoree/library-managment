@@ -16,8 +16,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- *
- * @author Lav
+ * Predstavlja korisnika koji se loguje na sistem
+ * Korisnik ima id, korisnicko ime, sifru, ime, prezime
+ * 
+ * @author Lav Jovanovic
  */
 @Entity
 @Getter
@@ -27,20 +29,35 @@ import lombok.Setter;
 @Table(name = "users")
 public class User {
     
+    /**
+     * Jedinstveni identifikator Korisnika kao Long
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id", columnDefinition = "BIGINT UNSIGNED")
     private long userId;
     
+    /**
+     * Korisnicko ime korisnika kao String, ne sme biti null
+     */
     @Column(name = "username", nullable = false)
     private String username;
     
+    /**
+     * Sifra korisnika kao String, ne sme biti null
+     */
     @Column(name = "password", nullable = false)
     private String password;
     
+    /**
+     * Ime korisnika kao String, ne sme biti null
+     */
     @Column(name = "first_name", nullable = false)
     private String firstName;
     
+    /**
+     * Prezime korisnika kao String, ne sme biti null
+     */
     @Column(name = "last_name", nullable = false)   
     private String prezime;
     

@@ -24,8 +24,10 @@ import org.hibernate.annotations.ManyToAny;
 import org.hibernate.internal.build.AllowSysOut;
 
 /**
- *
- * @author Lav
+ * Predstavlja zaduzenje koje clan moze da ima u biblioteci
+ * Zaduzenje ima id, datum pocetka zaduzenja, datum zavrsetka zaduzenja i clana
+ * 
+ * @author Lav Jovanovic
  */
 @Entity
 @Getter
@@ -35,17 +37,29 @@ import org.hibernate.internal.build.AllowSysOut;
 @ToString
 public class Loan {
     
+    /**
+     * Jedinstveni identifikator Zaduzenja kao Long
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "loan_id", columnDefinition = "BIGINT UNSIGNED")
     private Long loanId;
     
+    /**
+     * Datum pocetka zaduzenja kao LocalDateTime, ne sme biti null
+     */
     @Column(name = "start_date_of_loan", nullable = false)
     private LocalDateTime startDateOfLoan;
     
+    /**
+     * Datum zavrsetka zaduzenja kao LocalDateTime, ne sme biti null
+     */
     @Column(name = "end_date_of_loan", nullable = false)
     private LocalDateTime endDateOfLoan;
     
+    /**
+     * Clan koji ima zaduzenje kao instanca klase Member, ne sme biti null
+     */
     @ManyToOne
     @JsonIgnore
     @JoinColumn(name = "member_id", nullable = false)

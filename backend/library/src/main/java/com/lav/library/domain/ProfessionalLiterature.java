@@ -18,8 +18,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- *
- * @author Lav
+ * Predstavlja tip knjige koji postoji u biblioteci
+ * Strucna literatura ima id, knjigu i naucnu oblast
+ * 
+ * @author Lav Jovanovic
  */
 @Entity
 @Getter
@@ -29,13 +31,24 @@ import lombok.Setter;
 @Table(name = "professional_literature")
 public class ProfessionalLiterature {
     
+    /**
+     * Jedinstveni identifikator Strucne literature kao Long
+     */
+    
     @Id
     private Long id;
     
+    /**
+     * Knjiga kojoj strucna literatura pripada kao instanca klase Book
+     */   
     @OneToOne
     @MapsId
     private Book book;
     
+    
+    /**
+     * Naucna oblast kao String
+     */
     @Column(name = "scientific_area", nullable = false)
     private String scientificArea;
     

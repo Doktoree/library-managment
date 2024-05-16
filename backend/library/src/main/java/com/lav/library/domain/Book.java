@@ -18,8 +18,10 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 /**
- *
- * @author Lav
+ * Predstavlja knjigu koja se nalazi u biblioteci.
+ * Knjiga ima id, ime, godinu izdavanja i jeZauzeta
+ * 
+ * @author Lav Jovanovic
  */
 @Entity
 @Getter
@@ -29,17 +31,29 @@ import org.hibernate.annotations.OnDeleteAction;
 @ToString
 public class Book {
     
+    /**
+     * Jedinstveni identifikator Knjige kao Long
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", columnDefinition = "BIGINT UNSIGNED")
     private Long bookId;
     
+    /**
+     * Ime knjige kao String, ne sme biti null
+     */
     @Column(name = "name", nullable = false)
     private String name;
     
+    /**
+     * Godina izdavanja knjige kao int, ne sme biti null
+     */
     @Column(name = "year_of_publication", nullable = false)
     private int year;
     
+    /**
+     * Da li je knjiga zauzeta kao boolean, ne sme biti null
+     */
     @Column(name = "is_taken", nullable = false)
     private boolean isTaken = false;
     

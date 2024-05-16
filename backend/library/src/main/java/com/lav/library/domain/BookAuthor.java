@@ -20,9 +20,11 @@ import lombok.Setter;
 import org.hibernate.internal.build.AllowSysOut;
 
 /**
- *
- * @author Lav
+ * Predstavlja vezu između knjige i autora u biblioteci.
+ * Svaka veza sadrzi identifikator knjige i identifikator autora.
+ * @author Lav Jovanovic
  */
+
 
 @Entity
 @Getter
@@ -32,6 +34,9 @@ import org.hibernate.internal.build.AllowSysOut;
 @Table(name = "book_author")
 public class BookAuthor {
     
+    /**
+     * Identifikator kao instanca klase BookAuthorId
+     */
     @EmbeddedId
     private BookAuthorId id;
     

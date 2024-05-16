@@ -16,8 +16,11 @@ import lombok.Setter;
 import org.hibernate.internal.build.AllowSysOut;
 
 /**
+ * Predstavlja autora knjige. 
+ * Autor ima ime i prezime
  *
- * @author Lav
+ * @author Lav Jovanovic
+ *
  */
 @Entity
 @Getter
@@ -25,14 +28,23 @@ import org.hibernate.internal.build.AllowSysOut;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Author {
-    
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        @Column(name = "author_id", columnDefinition = "BIGINT UNSIGNED")
-        Long authorId;
-        
-        @Column(nullable = false)
-	String firstName;
-	String lastName;
-    
+
+    /**
+     * Jedinstveni identifikator Autora kao Long
+     */
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "author_id", columnDefinition = "BIGINT UNSIGNED")
+    Long authorId;
+
+    /**
+     * Ime autora kao String, ne sme biti null
+     */
+    @Column(nullable = false)
+    String firstName;
+    /**
+     * Prezime autora kao String
+     */
+    String lastName;
+
 }
