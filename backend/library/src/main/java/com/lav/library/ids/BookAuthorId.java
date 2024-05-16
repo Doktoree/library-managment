@@ -18,8 +18,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- *
- * @author Lav
+ * Klasa koja predstavlja jedinstveni identifikator za knjigu autora
+ * Ovaj identifikator se sastoji od instance klase Book i instance klase Author
+ * Koristi se kao primarni ključ u drugim entitetima
+ * 
+ * @author Lav Jovanovic
  */
 @Getter
 @Setter
@@ -29,10 +32,16 @@ import lombok.Setter;
 @EqualsAndHashCode
 public class BookAuthorId implements Serializable{
     
+    /**
+     * Knjiga koja je deo ovog identifikatora
+     */
     @ManyToOne
     @JoinColumn(name = "book_id")
     private Book book;
     
+    /**
+     * Autor koji je deo ovog identifikatora
+     */
     @ManyToOne
     @JoinColumn(name = "author_id") 
     private Author author;

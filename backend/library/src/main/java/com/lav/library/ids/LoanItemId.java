@@ -22,8 +22,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- *
- * @author Lav
+ * Klasa koja predstavlja jedinstveni identifikator za stavku zaduzenja
+ * Ovaj identifikator se sastoji od identifikatora stavke zaduzenja i instance klase Loan
+ * Koristi se kao primarni ključ u drugim entitetima
+ * 
+ * @author Lav Jovanovic
  */
 @Getter
 @Setter
@@ -32,7 +35,14 @@ import lombok.Setter;
 @EqualsAndHashCode
 public class LoanItemId implements Serializable {
 
+    /**
+     * Jedinstveni identifikator za stavku zaduzenja kao Long
+     */
     private Long loanItemId;
+    
+    /**
+     * Zaduzenje koje je deo identifikatora kao instanca klase Loan
+     */
     private Loan loan;
 
 }
