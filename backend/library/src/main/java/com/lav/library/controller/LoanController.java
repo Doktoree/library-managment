@@ -56,8 +56,9 @@ public class LoanController {
 
     private String validateLoanDto(LoanDto loanDto) {
 
-        if (loanDto.getLoanItems() == null || loanDto.getEndDateOfLoan() == null || loanDto.getMemberId() == null
-                || loanDto.getStartDateOfLoan() == null) {
+        System.out.println("id: " + loanDto.getMemberId());
+
+        if (loanDto.getLoanItems() == null || loanDto.getMemberId() == null) {
             return "All fields are required!";
         }
 
@@ -65,56 +66,50 @@ public class LoanController {
             return "There must be at least one loan item!";
         }
 
-        if (loanDto.getStartDateOfLoan().isAfter(LocalDateTime.now())) {
-            return "Date must be a valid date in the past!";
-        }
-
-        if (loanDto.getStartDateOfLoan().isAfter(loanDto.getEndDateOfLoan())) {
-            return "Start date of loan can not be after end date of loan!";
-        }
-
         return null;
     }
-    
+
     @GetMapping("{id}")
-    public ResponseEntity<?> getLoan(@PathVariable Long id){
-        
+    public ResponseEntity<?> getLoan(@PathVariable Long id) {
+
         LoanDto loanDto = loanService.getLoan(id);
-        
-        if(loanDto == null)
+
+        if (loanDto == null) {
             return ResponseEntity.badRequest().body("There is no loan with the given ID!");
-        
+        }
+
         return ResponseEntity.ok(loanDto);
-        
+
     }
-    
+
     @GetMapping
-    public ResponseEntity<?> getLoan(@RequestBody LoanDto loanDto){
-        
+    public ResponseEntity<?> getLoan(@RequestBody LoanDto loanDto) {
+
         Member member = new Member();
         member.setMemberId(loanDto.getMemberId());
         List<LoanDto> dtos = loanService.getLoan(member);
-        
-        if(dtos == null)
+
+        if (dtos == null) {
             return ResponseEntity.badRequest().body("There is no member with the given ID!");
-        
+        }
+
         return ResponseEntity.ok(dtos);
-        
+
     }
-    
+
     @PatchMapping("{id}")
-    public ResponseEntity<?> saveLoan(@RequestBody LoanDto loanDto, @PathVariable Long id){
-        
+    public ResponseEntity<?> saveLoan(@RequestBody LoanDto loanDto, @PathVariable Long id) {
+
         loanDto.setLoanId(id);
         System.out.println("Loan id: " + loanDto.getLoanId() + " id: " + id);
         LoanDto dto = loanService.saveLoan(loanDto);
-        
-        
-        if(dto == null)
+
+        if (dto == null) {
             return ResponseEntity.badRequest().body("One of ids are bad!");
-        
+        }
+
         return ResponseEntity.ok(dto);
-        
+
     }
 
 }

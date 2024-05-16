@@ -65,10 +65,7 @@ public class LoanService {
             if (!optionalBook.isPresent()) {
                 return null;
             }
-            System.out.println("Usao: " + optionalBook.get().getBookId());
-            System.out.println("Bool: " + optionalBook.get().isTaken());
             if (!optionalBook.get().isTaken()) {
-                System.out.println("Usao1");
                 Book book = optionalBook.get();
                 book.setTaken(true);
                 bookRepository.save(book);
@@ -124,7 +121,6 @@ public class LoanService {
     
     public LoanDto saveLoan(LoanDto dto){
         
-        System.out.println("!!!!!!!!!!!!! + " + dto.getLoanId());
         Member member = new Member();
         member.setMemberId(dto.getMemberId());
         Optional<Loan> optionalLoan = loanRepository.findById(LoanMapper.mapToLoan(dto, member).getLoanId());
@@ -135,7 +131,6 @@ public class LoanService {
         
         Loan loan = optionalLoan.get();
         
-        System.out.println("Loan: " + loan.toString());
         
         List<LoanItem> loanItems = loanItemRepository.findByLoan(loan);
         

@@ -38,7 +38,9 @@ public class MemberMapper {
                 memberDto.getLastName(),
                 memberDto.getAdress(),
                 memberDto.getPhoneNumber(),
-                memberDto.getBirthDate() 
+                memberDto.getBirthDate(),
+                null
+                
         
         );
         

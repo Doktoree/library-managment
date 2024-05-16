@@ -4,6 +4,8 @@
  */
 package com.lav.library.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -18,6 +20,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.ManyToAny;
 import org.hibernate.internal.build.AllowSysOut;
 
 /**
@@ -44,6 +47,7 @@ public class Loan {
     private LocalDateTime endDateOfLoan;
     
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
     

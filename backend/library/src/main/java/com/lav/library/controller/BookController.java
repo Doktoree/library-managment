@@ -131,11 +131,7 @@ public class BookController {
     
     @PatchMapping("/pliterature/{id}")
     public ResponseEntity<?> saveBook(@RequestBody ProfessionalLiteratureDto dto, @PathVariable Long id){
-        
-//        String validateMessage = validate(dto);
-//        
-//        if(validateMessage != null)
-//            return ResponseEntity.badRequest().body(validateMessage);
+
         
         ProfessionalLiteratureDto plDto = plService.saveProfessionalLiterature(id, dto);
         
