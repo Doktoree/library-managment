@@ -11,8 +11,10 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- *
- * @author Lav
+ * DTO klasa koja predstavlja informacije o stavki zaduzenja koja postoji u zaduzenju
+ * LoanItemDto ima id stavke zaduzenja, id zaduzenja, status i id knjige
+ * 
+ * @author Lav Jovanovic
  */
 @Getter
 @Setter
@@ -21,9 +23,24 @@ import lombok.ToString;
 @ToString
 public class LoanItemDto {
     
+    /**
+     * Jedinstveni identifikator Stavke zaduzenja kao Long
+     */
     private Long loanItemId;
+    
+    /**
+     * Jedinstveni identifikator Zaduzenja kao Long
+     */
     private Long loanId;
+    
+    /**
+     * Status stavke zaduzenja kao Stirng
+     */
     private String status = "not returned";
+    
+    /**
+     * Jedinstveni identifikator Knjige kao Long
+     */
     private Long bookId;
     
 }

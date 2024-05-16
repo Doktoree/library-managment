@@ -16,8 +16,10 @@ import lombok.ToString;
 import org.hibernate.internal.build.AllowSysOut;
 
 /**
- *
- * @author Lav
+ * DTO klasa koja predstavlja informacije o knjizi
+ * BookDto ima id, ime, godinu izdavanja i jeZauzeta
+ * 
+ * @author Lav Jovanovic
  */
 @Getter
 @Setter
@@ -26,11 +28,24 @@ import org.hibernate.internal.build.AllowSysOut;
 @ToString
 public class BookDto {
 
+    /**
+     * Jedinstveni identifikator Knjige kao Long
+     */
     private Long bookId;
 
+    /**
+     * Ime knjige kao String
+     */
     private String name;
 
+    /**
+     * Godina izdavanja knjige kao int
+     */
     private int year;
+    
+    /**
+     * Da li je knjiga zauzeta kao boolean
+     */
 
     private boolean isTaken;
 

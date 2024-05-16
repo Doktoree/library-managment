@@ -11,8 +11,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- *
- * @author Lav
+ * DTO klasa koja predstavlja informacije o Autoru
+ * AuthorDto ima id autora, ime autora, prezime autora
+ * 
+ * @author Lav Jovanovic
  */
 @Getter
 @Setter
@@ -20,8 +22,19 @@ import lombok.Setter;
 @NoArgsConstructor
 public class AuthorDto {
 
+    /**
+     * Jedinstveni identifikator Autora kao Long
+     */
     Long authorId;
+    
+    /**
+     * Ime autora kao String
+     */
     String firstName;
+    
+    /**
+     * Prezime autora kao String
+     */
     String lastName;
 
 }

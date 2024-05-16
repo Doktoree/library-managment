@@ -12,8 +12,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- *
- * @author Lav
+ * DTO klasa koja predstavlja informacije o strucnoj literaturi
+ * ProfessionalLiteratureDto ima id knjige, ime, godinu izdavanja, jeZauzeta, naucnu oblast i listu Autora
+ * 
+ * @author Lav Jovanovic
  */
 @Getter
 @Setter
@@ -22,11 +24,34 @@ import lombok.Setter;
 
 public class ProfessionalLiteratureDto {
     
+    /**
+     * Jedinstveni identifikator Knjige kao Long
+     */
     private Long bookId;
+    
+    /**
+     * Ime knjige kao String
+     */
     private String name;
+    
+    /**
+     * Godina izdavanja knjige kao int
+     */
     private int year;
+    
+    /**
+     * Da li je knjiga zauzeta kao boolean
+     */
     private boolean isTaken;
+    
+    /**
+     * Naucna oblast knjige(strucne literature) kao String
+     */
     private String scientificArea;
+    
+    /**
+     * Lista autora knjige(strucne literature) ciji elementi su instance klase Author
+     */
     private List<Author> authors;
     
 }

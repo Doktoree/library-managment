@@ -22,8 +22,10 @@ import lombok.ToString;
 import org.hibernate.internal.build.AllowSysOut;
 
 /**
- *
- * @author Lav
+ * DTO klasa koja predstavlja informacije o zaduzenju koje clan ima u biblioteci
+ * LoanDto ima id, datum pocetka zaduzenja, datum zavrsetka zaduzenja, id clana i listu stavki zaduzenja
+ * 
+ * @author Lav Jovanovic
  */
 @Getter
 @Setter
@@ -32,10 +34,31 @@ import org.hibernate.internal.build.AllowSysOut;
 @ToString
 public class LoanDto {
     
+    /**
+     * Jedinstveni identifikator Zaduzenja kao Long
+     */
     private Long loanId;
+    
+    /**
+     * Datum pocetka zaduzenja kao LocalDateTime
+     * Pocetna vrednost jeste sadasnje vreme
+     */
     private LocalDateTime startDateOfLoan = LocalDateTime.now();
+    
+    /**
+     * Datum zavrsetka zaduzenja kao LocalDateTime
+     * Pocetna vrednost jeste vrednost datuma pocetka zaduzenja plus 20 dana
+     */
     private LocalDateTime endDateOfLoan = startDateOfLoan.plusDays(20);
+    
+    /**
+     * Jedinstveni identifikator Clana kao Long
+     */
     private Long memberId;
+    
+    /**
+     * Lista stavki zaduzenja ciji elementi su instance klase LoanItemDto
+     */
     private List<LoanItemDto> loanItems;
     
 }
