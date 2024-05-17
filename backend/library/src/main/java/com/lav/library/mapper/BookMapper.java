@@ -8,11 +8,18 @@ import com.lav.library.domain.Book;
 import com.lav.library.dto.BookDto;
 
 /**
- *
- * @author Lav
+ * Klasa koja se koristi za mapiranje izmedju objekata klase Book i BookDto
+ * 
+ * @author Lav Jovanovic
  */
 public class BookMapper {
 
+    /**
+     * Mapira objekat klase Book na BookDto
+     * 
+     * @param book Knjiga koji se mapira kao instanca klase Book
+     * @return mapirani objekat kao instanca klase BookDto
+     */
     public static BookDto mapToBookDto(Book book) {
 
         return new BookDto(
@@ -23,6 +30,13 @@ public class BookMapper {
 
     }
 
+    
+    /**
+     * Mapira objekat klase BookDto na Book
+     * 
+     * @param bookDto DTO koji se mapira kao instanca klase BookDto
+     * @return mapirani objekat kao instanca klase Book
+     */
     public static Book mapToBook(BookDto bookDto) {
 
         return new Book(

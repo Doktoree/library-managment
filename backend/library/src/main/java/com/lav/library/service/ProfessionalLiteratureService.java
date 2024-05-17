@@ -29,8 +29,9 @@ import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 /**
- *
- * @author Lav
+ * Predstavlja servisnu klasu za upravljanje strucnom literaturom
+ * 
+ * @author Lav Jovanovic
  */
 @Service
 public class ProfessionalLiteratureService {
@@ -47,7 +48,12 @@ public class ProfessionalLiteratureService {
     @Autowired
     private BookAuthorRepository bookAuthorRepository;
 
-
+    /**
+     * Kreira novu strucnu literaturu na osnovu prosledjenih podataka
+     *
+     * @param dto podaci o strucnoj literaturi u DTO formatu
+     * @return DTO koji predstavlja kreiranu strucnu literaturu
+     */
     public ProfessionalLiteratureDto createProfessionalLiterature(ProfessionalLiteratureDto dto) {
 
         BookDto bookDto = ProfessionalLiteratureMapper.mapToBookDto(dto);
@@ -76,6 +82,12 @@ public class ProfessionalLiteratureService {
         return ProfessionalLiteratureMapper.mapToProfessionalLiteratureDto(savedPl, savedBook, savedAuthors);
     }
 
+    /**
+     * Proverava postojanje autora u bazi podataka
+     *
+     * @param author autor koji se proverava
+     * @return pronadjeni autor ili null ako nije pronadjen
+     */
     public Author checkAuthor(Author author) {
 
         List<Author> authors = authorRepository.findByFirstNameAndLastName(author.getFirstName(), author.getLastName());
@@ -88,6 +100,13 @@ public class ProfessionalLiteratureService {
 
     }
     
+    /**
+     * Cuva azuriranu verziju strucne literature
+     *
+     * @param id id strucne literature koja se azurira
+     * @param dto novi podaci o strucnoj literaturi
+     * @return azurirani DTO koji predstavlja strucnu literaturu
+     */
     public ProfessionalLiteratureDto saveProfessionalLiterature(Long id, ProfessionalLiteratureDto dto){
         Optional<ProfessionalLiterature> optionalPl = plRepository.findById(id);
         Optional<Book> optionalBook = bookRepository.findById(id);
@@ -133,7 +152,12 @@ public class ProfessionalLiteratureService {
         return null;
     }
 
-    
+    /**
+     * Pribavlja listu strucne literature na osnovu prosledjenih podataka o knjizi
+     *
+     * @param dto podaci o knjizi u DTO formatu
+     * @return lista objekata koji predstavljaju pronađenu strucnu literaturu
+     */
     public List<Object> getBooks(BookDto dto){
         
         Book book = BookMapper.mapToBook(dto);

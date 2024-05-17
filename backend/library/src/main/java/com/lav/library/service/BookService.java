@@ -31,8 +31,10 @@ import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 /**
- *
- * @author Lav
+ * Predstavlja servisnu klasu za upravljanje knjigama
+ * Knjige se mogu kreirati, ucitavati,brisati ili azurirati
+ * 
+ * @author Lav Jovanovic
  */
 @Service
 public class BookService {
@@ -52,6 +54,12 @@ public class BookService {
     @Autowired
     private AuthorRepository authorRepository;
     
+    /**
+     * Vraca listu svih knjiga
+     * 
+     * @return lista sa svim DTO knjigama,
+     * ili prazna lista ako u biblioteci nema knjiga
+     */
     public List<BookDto> getAllBooks(){
         
         List<Book> allBooks = bookRepository.findAll();
@@ -59,6 +67,13 @@ public class BookService {
         return allBooks.stream().map(BookMapper::mapToBookDto).collect(Collectors.toList());
     }
     
+    
+    /**
+     * Kreira knjigu u biblioteci
+     * 
+     * @param bookDto podaci o knjizi koja se dodaje u DTO formatu
+     * @return DTO koji predstavlja kreiranu knjigu
+     */   
     public BookDto createBook(BookDto bookDto){
         
         Book book = BookMapper.mapToBook(bookDto);
@@ -67,6 +82,13 @@ public class BookService {
         return BookMapper.mapToBookDto(createdBook);
     }
     
+    /**
+     * Pribavlja informacije o odredjenoj knjizi
+     * 
+     * @param id id knjige 
+     * @param authors lista autora povezanih sa knjigom
+     * @return DTO koji predstavlja informacije o knjizi
+     */
     public Object getBook(Long id, List<Author> authors){
         
         Optional<Book> optionalBook = bookRepository.findById(id);
@@ -96,6 +118,12 @@ public class BookService {
         
     }
 
+    /**
+     * Pribavlja knjige na osnovu zadatih kriterijuma
+     * 
+     * @param bookDto podaci o knjizi na osnovu kojih se vrsi pretraga
+     * @return lista objekata koji predstavljaju pronadjene knjige
+     */
      public List<Object> getBooks(BookDto bookDto){
         
          
@@ -140,7 +168,12 @@ public class BookService {
         
          return list;
     }
-    
+     
+    /**
+     * Brise knjigu na osnovu prosleđenog id-ja
+     * @param id ID knjige koja se brise
+     * @return true ako je knjiga uspešno obrisana, inace false
+     */
     public boolean deleteBook(Long id){
         
         Optional<Book> optionalBook = bookRepository.findById(id);
@@ -161,6 +194,13 @@ public class BookService {
         return true;
         
     }
+    
+    /**
+     * Pribavlja autore koji su povezani sa određenom knjigom.
+     * 
+     * @param id ID knjige
+     * @return lista autora povezanih sa određenom knjigom
+     */
     
     public List<Author> getAuthorsByBookId(Long id){
         

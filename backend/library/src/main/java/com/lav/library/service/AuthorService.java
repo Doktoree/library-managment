@@ -15,8 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- *
- * @author Lav
+ * Predstavlja servisnu klasu za upravljanje autorima
+ * 
+ * @author Lav Jovanovic
  */
 @Service
 public class AuthorService {
@@ -27,6 +28,13 @@ public class AuthorService {
     @Autowired
     private BookAuthorRepository bookAuthorRepository;
     
+    /**
+     * Vraca listu autora povezanih sa datim id knjige
+     * 
+     * @param id id knjige preko kojeg se pronalaze autori
+     * @return lista sa svim knjigama,
+     * ili prazna lista ako u biblioteci nema autora za dati id knjige
+     */
     public List<Author> getAuthorsByBookId(Long id){
         
         List<Author> authors = new ArrayList<>();

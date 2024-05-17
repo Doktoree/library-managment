@@ -27,8 +27,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- *
- * @author Lav
+ * Predstavlja servisnu klasu za upravljanje beletristikom
+ * 
+ * @author Lav Jovanovic
  */
 @Service
 public class FictionService {
@@ -46,7 +47,12 @@ public class FictionService {
     @Autowired
     private BookAuthorRepository bookAuthorRepository;
     
-    
+    /**
+     * Kreira novu knjigu beletristike na osnovu prosledjenih podataka
+     *
+     * @param dto podaci o beletristici u DTO formatu
+     * @return DTO koji predstavlja kreiranu beletristiku
+     */
     public FictionDto createFiction(FictionDto dto) {
 
         BookDto bookDto = FictionMapper.mapToBookDto(dto);
@@ -75,6 +81,12 @@ public class FictionService {
         return FictionMapper.mapToFictionDto(savedFiction, savedBook, savedAuthors);
     }
 
+     /**
+     * Proverava postojanje autora u bazi podataka
+     *
+     * @param author autor koji se proverava
+     * @return pronadjeni autor ili null ako autor nije pronađen
+     */
     public Author checkAuthor(Author author) {
 
         List<Author> authors = authorRepository.findByFirstNameAndLastName(author.getFirstName(), author.getLastName());
@@ -86,6 +98,14 @@ public class FictionService {
         return authors.get(0);
 
     }
+    
+     /**
+     * Cuva azuriranu verziju beletristike
+     *
+     * @param id ID beletristike koja se azurira
+     * @param dto novi podaci o beletristici
+     * @return azurirani DTO koji predstavlja beletristiku
+     */
     
     public FictionDto saveFiction(Long id, FictionDto dto){
         Optional<Fiction> optionalFiction = fictionRepository.findById(id);

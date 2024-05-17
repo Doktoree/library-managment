@@ -10,11 +10,18 @@ import com.lav.library.domain.LoanItem;
 import com.lav.library.dto.LoanItemDto;
 
 /**
- *
- * @author Lav
+ * Klasa koja se koristi za mapiranje izmedju objekata klase LoanItem i LoanItemDto
+ * 
+ * @author Lav Jovanovic
  */
 public class LoanItemMapper {
 
+    /**
+     * Mapira objekat klase LoanItem na LoanItemDto
+     * 
+     * @param loanItem Stavka zaduzenja koja se mapira kao instanca klase LoanItem
+     * @return mapirani objekat kao instanca klase LoanItemDto
+     */
     public static LoanItemDto mapToLoanDto(LoanItem loanItem) {
 
         return new LoanItemDto(loanItem.getLoanItemId(),
@@ -24,6 +31,12 @@ public class LoanItemMapper {
 
     }
 
+    /**
+     * Mapira objekat klase LoanItemDto na LoanItem
+     * 
+     * @param dto DTO koji se mapira kao instanca klase LoanItemDto
+     * @return mapirani objekat kao instanca klase LoanItem
+     */
     public static LoanItem mapToLoanItem(LoanItemDto dto) {
 
         Loan loan = new Loan();

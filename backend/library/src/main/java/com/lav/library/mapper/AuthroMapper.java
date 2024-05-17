@@ -8,11 +8,18 @@ import com.lav.library.domain.Author;
 import com.lav.library.dto.AuthorDto;
 
 /**
- *
- * @author Lav
+ * Klasa koja se koristi za mapiranje izmedju objekata klase Author i AuthorDto
+ * 
+ * @author Lav Jovanovic
  */
 public class AuthroMapper {
     
+    /**
+     * Mapira objekat klase Author na AuthorDto
+     * 
+     * @param author Autor koji se mapira kao instanca klase Author
+     * @return mapirani objekat kao instanca klase AuthorDto
+     */
     public static AuthorDto mapToAuthorDto(Author author){
         
         return new AuthorDto(
@@ -24,7 +31,12 @@ public class AuthroMapper {
         );
         
     }
-    
+    /**
+     * Mapira objekat klase AuthorDto na Author
+     * 
+     * @param authorDto DTO koji se mapira kao instanca klase AuthorDto
+     * @return mapirani objekat kao instanca klase Author
+     */
     public static Author mapToAuthor(AuthorDto authorDto){
         
         return new Author(

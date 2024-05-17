@@ -25,8 +25,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- *
- * @author Lav
+ * Predstavlja servisnu klasu za upravljanje zaduzenjima u biblioteci
+ * Zaduzenja se mogu kreirati, ucitati i sacuvati
+ * 
+ * @author Lav Jovanovic
  */
 @Service
 public class LoanService {
@@ -43,6 +45,12 @@ public class LoanService {
     @Autowired
     private BookRepository bookRepository;
 
+    /**
+     * Kreira novo zaduzenje na osnovu prosledjenih podataka
+     *
+     * @param dto podaci o zaduzenju u DTO formatu
+     * @return DTO koji predstavlja kreirano zaduzenje
+     */
     public LoanDto createLoan(LoanDto dto) {
 
         Optional<Member> optionalMember = memberRepository.findById(dto.getMemberId());
@@ -79,7 +87,12 @@ public class LoanService {
         return LoanMapper.mapToLoanDto(savedLoan, member, savedLoanItems.stream().map(LoanItemMapper::mapToLoanDto).collect(Collectors.toList()));
     }
 
-    
+    /**
+     * Pribavlja informacije o odredjenoj pozajmici na osnovu id-ja.
+     *
+     * @param id id zaduzenja
+     * @return DTO koji predstavlja informacije o zaduzenju
+     */
     public LoanDto getLoan(Long id){
         
         Optional<Loan> optionalLoan = loanRepository.findById(id);
@@ -94,6 +107,12 @@ public class LoanService {
         
     }
     
+     /**
+     * Pribavlja listu zaduzenja za odredjenog clana
+     *
+     * @param member clan za koga se vrsi pretraga zaduzenja
+     * @return lista DTO-ova koji predstavljaju zaduzenja clana
+     */
     public List<LoanDto> getLoan(Member member){
         
         Optional<Member> optionalMember = memberRepository.findById(member.getMemberId());
@@ -119,6 +138,12 @@ public class LoanService {
         return loanDtos;
     }
     
+    /**
+     * Cuva azuriranu verziju zaduzenja
+     *
+     * @param dto novi podaci o zaduzenju
+     * @return azurirani DTO koji predstavlja zaduzenje
+     */
     public LoanDto saveLoan(LoanDto dto){
         
         Member member = new Member();

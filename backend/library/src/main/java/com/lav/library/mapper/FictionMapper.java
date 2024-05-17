@@ -14,11 +14,18 @@ import com.lav.library.dto.ProfessionalLiteratureDto;
 import java.util.List;
 
 /**
- *
- * @author Lav
+ * Klasa koja se koristi za mapiranje izmedju objekata klasa Fiction, FictionDto i Book
+ * 
+ * @author Lav Jovanovic
  */
 public class FictionMapper {
     
+    /**
+     * Mapira objekat klase FictionDto na BookDto
+     *
+     * @param fictionDto DTO objekat koji se mapira kao instanca klase FictionDto
+     * @return mapirani objekat kao instanca klase BookDto
+     */
     public static BookDto mapToBookDto(FictionDto fictionDto){
         
         
@@ -31,6 +38,13 @@ public class FictionMapper {
         
     }
     
+    /**
+     * Mapira objekat klase FictionDto i objekat klase Book na Fiction
+     *
+     * @param fictionDto DTO koji se mapira kao instanca klase FictionDto
+     * @param book Knjiga koja se mapira kao instanca klase Book
+     * @return mapirani objekat kao instanca klase Fiction
+     */
     public static Fiction mapToFiction(FictionDto fictionDto, Book book){
         
         
@@ -46,6 +60,14 @@ public class FictionMapper {
     }
     
     
+    /**
+     * Mapira objekat klase Fiction, objekat klase Book i listu autora na FictionDto
+     *
+     * @param fiction Beletrisika koja se mapira kao instanca klase Fiction
+     * @param book Knjiga koja se mapira kao instanca klase Book
+     * @param authors Lista autora koja se mapira
+     * @return mapirani objekat kao instanca klase FictionDto
+     */
     public static FictionDto mapToFictionDto(Fiction fiction, Book book, List<Author> authors){
         
         return new FictionDto(

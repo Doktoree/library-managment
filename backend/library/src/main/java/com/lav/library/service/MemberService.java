@@ -16,8 +16,10 @@ import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 /**
- *
- * @author Lav
+ * Predstavlja servisnu klasu za upravljanje clanovima u biblioteci
+ * Clanovi se mogu kreirati, sacuvati i obrisati
+ * 
+ * @author Lav Jovanovic
  */
 @Service
 public class MemberService {
@@ -25,6 +27,12 @@ public class MemberService {
     @Autowired
     private MemberRepository memberRepository;
     
+    /**
+     * Kreira novog clana biblioteke na osnovu prosledjenih podataka
+     *
+     * @param memberDto podaci o clanu u DTO formatu
+     * @return DTO koji predstavlja kreiranog clana
+     */
     public MemberDto createMember(MemberDto memberDto){
         
         Member member = MemberMapper.mapToMember(memberDto);
@@ -33,6 +41,13 @@ public class MemberService {
         return MemberMapper.mapToMemberDto(createdMember);
     }
     
+     /**
+     * Cuva azuriranu verziju clana biblioteke na osnovu prosledjenih podataka i id-ja
+     *
+     * @param memberDto novi podaci o clanu u DTO formatu
+     * @param id id clana koji se azurira
+     * @return azurirani DTO koji predstavlja clana biblioteke
+     */
     public MemberDto saveMember(MemberDto memberDto, Long id){
         
         Optional<Member> optionalMember = memberRepository.findById(id);
@@ -54,6 +69,12 @@ public class MemberService {
         
     }
     
+    /**
+     * Pribavlja listu clanova biblioteke na osnovu prosledjenih podataka
+     *
+     * @param memberDto podaci o clanu na osnovu kojih se vrsi pretraga
+     * @return Lista DTO-ova koji predstavljaju pronadjene clanove
+     */
     public List<MemberDto> getMembers(MemberDto memberDto){
         
         Member member = MemberMapper.mapToMember(memberDto);
@@ -62,6 +83,12 @@ public class MemberService {
         return memberDtos;
     }
     
+    /**
+     * Pribavlja informacije o određenom clanu na osnovu ID-ja
+     *
+     * @param id id clana
+     * @return DTO koji predstavlja informacije o clanu
+     */
     public MemberDto getMember(Long id){
         
         Optional<Member> optionalMember = memberRepository.findById(id);
@@ -77,6 +104,11 @@ public class MemberService {
         return null;
     }
     
+    /**
+     * Pribavlja sve clanove biblioteke
+     *
+     * @return Lista DTO-ova koji predstavljaju sve clanove biblioteke
+     */
     public List<MemberDto> getAllMembers(){
         
         List<Member> allMembers = memberRepository.findAll();
@@ -84,7 +116,12 @@ public class MemberService {
         return allMembers.stream().map(MemberMapper::mapToMemberDto).collect(Collectors.toList());
     }
     
-    
+    /**
+     * Brise clana biblioteke na osnovu id-ja
+     *
+     * @param id id clana koji se brise
+     * @return true ako je clan uspesno obrisan, inace false
+     */
     public boolean deleteMember(Long id){
         
         Optional<Member> optionalMember = memberRepository.findById(id);
