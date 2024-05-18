@@ -20,12 +20,12 @@ public class ProfessionalLiteratureTest {
     ProfessionalLiterature pl;
 
     @BeforeEach
-    void setUp() throws Exception {
+    void setUp() {
         pl = new ProfessionalLiterature();
     }
 
     @AfterEach
-    void tearDown() throws Exception {
+    void tearDown() {
         pl = null;
     }
 

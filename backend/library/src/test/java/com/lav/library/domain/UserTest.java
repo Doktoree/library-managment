@@ -16,16 +16,16 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author Lav
  */
 public class UserTest {
-    
+
     User user;
-    
+
     @BeforeEach
-    void setUp() throws Exception {
+    void setUp() {
         user = new User();
     }
 
     @AfterEach
-    void tearDown() throws Exception {
+    void tearDown() {
         user = null;
     }
 
@@ -79,5 +79,5 @@ public class UserTest {
         user.setPrezime("prezime");
         assertEquals("prezime", user.getPrezime());
     }
-    
+
 }
