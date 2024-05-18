@@ -12,15 +12,13 @@ import org.springframework.stereotype.Repository;
 
 /**
  *
- * @author Lav
+ * @author Lav Jovanovic
  */
 @Repository
 public interface BookAuthorRepository extends JpaRepository<BookAuthor, BookAuthorId> {
     
     List<BookAuthor> findById_AuthorAuthorId(Long authorId);
     List<BookAuthor> findById_BookBookId(Long bookId);
-    //List<BookAuthor> findByIdBookId(Long bookId);
-    //List<BookAuthor> findBybookId(Long bookId);
-    //List<BookAuthor> findByBookAuthorIdid(Long authorId, Long bookId);
+
     
 }

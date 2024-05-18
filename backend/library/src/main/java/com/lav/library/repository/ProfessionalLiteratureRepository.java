@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 
 /**
  *
- * @author Lav
+ * @author Lav Jovanovic
  */
 @Repository
 public interface ProfessionalLiteratureRepository extends JpaRepository<ProfessionalLiterature, Long> {

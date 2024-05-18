@@ -18,12 +18,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface LoanItemRepository extends JpaRepository<LoanItem, LoanItemId> {
-    
-//    List<LoanItem> findByloanItemId(Long loanItemId);
-//    List<LoanItem> findByloanId(Long loanId);
-    
-    //List<LoanItem> findByIdLoan(Loan loan);
-    
+
     List<LoanItem> findByLoan(Loan loan);
-    
+
 }

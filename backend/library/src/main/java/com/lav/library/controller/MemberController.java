@@ -26,8 +26,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- *
- * @author Lav
+ * Rest kontroler koji upravlja HTTP zahtevima vezanim za clanove biblioteke
+ * Pruza krajnje tacke za kreiranje, dobijanje, azuriranje i brisanje clanova
+ * 
+ * @author Lav Jovanovic
  */
 @RestController
 @RequestMapping("/api/member")
@@ -36,6 +38,12 @@ public class MemberController {
     @Autowired
     private MemberService memberService;
 
+    /**
+     * Kreira novog clana
+     * 
+     * @param memberDto DTO objekat clana
+     * @return kreirani objekat ili poruka o gresci
+     */
     @PostMapping
     public ResponseEntity<?> createMember(@RequestBody MemberDto memberDto) {
 
@@ -51,6 +59,12 @@ public class MemberController {
 
     }
 
+    /**
+     * Validira DTO objekat clana
+     * 
+     * @param memberDto DTO clana
+     * @return poruka o gresci ili null ako je validacija uspešna
+     */
     private String validateMemberDto(MemberDto memberDto) {
 
         if (memberDto.getFirstName() == null || memberDto.getLastName() == null || memberDto.getBirthDate() == null
@@ -92,6 +106,13 @@ public class MemberController {
         return null;
     }
 
+    /**
+     * Azurira clana sa datim ID-om
+     * 
+     * @param id ID clana
+     * @param memberDto DTO clana
+     * @return azurirani objekat ili poruka o gresci
+     */
     @PatchMapping("{id}")
     public ResponseEntity<?> saveMember(@PathVariable Long id, @RequestBody MemberDto memberDto) {
 
@@ -110,6 +131,12 @@ public class MemberController {
         return ResponseEntity.ok(savedMemberDto);
     }
     
+    /**
+     * Pretrazuje clanove po zadatim kriterijumima
+     * 
+     * @param memberDto DTO objekat za pretragu
+     * @return lista clanova koji zadovoljavaju kriterijume ili poruka o gresci
+     */
      @GetMapping("/search")
      public ResponseEntity<?> getMembers(@RequestBody MemberDto memberDto){
               
@@ -122,6 +149,12 @@ public class MemberController {
          
     }
      
+     /**
+     * Vraca clana sa datim id-om
+     * 
+     * @param id id clana
+     * @return objekat clana ili poruka o gresci
+     */
      @GetMapping("{id}")
      public ResponseEntity<?> getMember(@PathVariable Long id){
          
@@ -134,6 +167,11 @@ public class MemberController {
          
      }
      
+     /**
+     * Vraca sve clanove
+     * 
+     * @return lista svih clanova ili poruka o gresci
+     */
      @GetMapping
      public ResponseEntity<?> getAllMembers(){
          
@@ -146,6 +184,12 @@ public class MemberController {
          
      }
      
+     /**
+     * Brise clana sa datim id-om
+     * 
+     * @param id id clana
+     * @return poruka o uspesnom brisanju ili gresci
+     */
      @DeleteMapping("{id}")
      public ResponseEntity<String> deleteMember(@PathVariable Long id){
          

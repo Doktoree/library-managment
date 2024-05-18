@@ -25,8 +25,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- *
- * @author Lav
+ * Rest kontroler koji upravlja HTTP zahtevima vezanim za zaduzenja knjiga
+ * Pruza krajnje tacke za kreiranje, dobijanje i azuriranje zaduzenja
+ * 
+ * @author Lav Jovanovic
  */
 @RestController
 @RequestMapping("/api/loan")
@@ -35,6 +37,12 @@ public class LoanController {
     @Autowired
     private LoanService loanService;
 
+    /**
+     * Kreira novo zaduzenje
+     * 
+     * @param loanDto DTO objekat zaduzenja
+     * @return kreirani objekat ili poruka o gresci
+     */
     @PostMapping
     public ResponseEntity<?> createLoan(@RequestBody LoanDto loanDto) {
 
@@ -54,6 +62,12 @@ public class LoanController {
 
     }
 
+    /**
+     * Validira DTO objekat zaduzenja
+     * 
+     * @param loanDto DTO zaduzenja
+     * @return poruka o gresci ili null ako je validacija uspesna
+     */
     private String validateLoanDto(LoanDto loanDto) {
 
         System.out.println("id: " + loanDto.getMemberId());
@@ -69,6 +83,12 @@ public class LoanController {
         return null;
     }
 
+    /**
+     * Vraca zaduzenje sa datim id-om
+     * 
+     * @param id ID zaduzenja
+     * @return objekat zaduzenja ili poruka o gresci
+     */
     @GetMapping("{id}")
     public ResponseEntity<?> getLoan(@PathVariable Long id) {
 
@@ -82,6 +102,12 @@ public class LoanController {
 
     }
 
+    /**
+     * Pretrazuje zaduzenja po zadatim kriterijumima
+     * 
+     * @param loanDto DTO objekat za pretragu
+     * @return lista zaduzenja koje zadovoljavaju kriterijume ili poruka o gresci
+     */
     @GetMapping
     public ResponseEntity<?> getLoan(@RequestBody LoanDto loanDto) {
 
@@ -97,6 +123,13 @@ public class LoanController {
 
     }
 
+    /**
+     * Azurira zaduzenje sa datim id-om
+     * 
+     * @param loanDto DTO zaduzenja
+     * @param id ID zaduzenja
+     * @return azurirani objekat ili poruka o gresci
+     */
     @PatchMapping("{id}")
     public ResponseEntity<?> saveLoan(@RequestBody LoanDto loanDto, @PathVariable Long id) {
 

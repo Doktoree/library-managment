@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 
 /**
  *
- * @author Lav
+ * @author Lav Jovanovic
  */
 @Repository
 public interface AuthorRepository extends JpaRepository<Author, Long> {

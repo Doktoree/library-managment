@@ -32,8 +32,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.function.EntityResponse;
 
 /**
- *
- * @author Lav
+ * Rest kontroler koji upravlja HTTP zahtevima vezanim za knjige
+ * Pruza krajnje tačke za kreiranje, dobijanje, azuriranje i brisanje profesionalne literature i beletrisike
+ * 
+ * @author Lav Jovanovic
  */
 @RestController
 @RequestMapping("/api/book")
@@ -51,6 +53,11 @@ public class BookController {
     @Autowired
     private AuthorService authorService;
     
+    /**
+     * Vraca sve knjige
+     * 
+     * @return ResponseEntity<?> Lista svih knjiga ili poruka o gresci
+     */
     @GetMapping
     public ResponseEntity<?> getAllBooks(){
         
@@ -63,6 +70,11 @@ public class BookController {
         
     }
     
+    /**
+     * Kreira novu knjigu iz oblasti strucne literature
+     * @param literatureDto DTO objekat strucne literature
+     * @return kreirani objekat ili poruka o gresci
+     */
     @PostMapping("/pliterature")
     public ResponseEntity<?> createBook(@RequestBody ProfessionalLiteratureDto literatureDto){
         
@@ -76,6 +88,12 @@ public class BookController {
         return ResponseEntity.status(HttpStatus.CREATED).body(createPlDto);
     }
     
+    /**
+     * Kreira novu knjigu iz oblasti beletristike
+     * 
+     * @param fictionDto DTO objekat beletristike
+     * @return kreirani objekat ili poruka o gresci
+     */
     @PostMapping("/fiction")
     public ResponseEntity<?> createBook(@RequestBody FictionDto fictionDto){
         
@@ -89,6 +107,12 @@ public class BookController {
         return ResponseEntity.status(HttpStatus.CREATED).body(createFictionDto);
     }
     
+    /**
+     * Validira DTO objekat strucne literature
+     * 
+     * @param dto DTO strucne literature
+     * @return poruka o gresci ili null ako je validacija uspesna
+     */
     private String validate(ProfessionalLiteratureDto dto){
         
         if(dto.getName() == null || dto.getScientificArea() == null)
@@ -106,6 +130,12 @@ public class BookController {
         return null;
     }
     
+    /**
+     * Validira DTO objekat beletristike
+     * 
+     * @param dto DTO beletristike
+     * @return poruka o gresci ili null ako je validacija uspesna
+     */
     private String validate(FictionDto dto){
         
         if(dto.getName() == null || dto.getGenre()== null || dto.getTheme() == null || dto.getWonPrizes() == null)
@@ -129,6 +159,13 @@ public class BookController {
         return null;
     }
     
+    /**
+     * Azurira knjigu iz oblasti strucne literature sa datim id-om
+     * 
+     * @param dto DTO strucne literature
+     * @param id id knjige
+     * @return azurirani objekat ili poruka o gresci
+     */
     @PatchMapping("/pliterature/{id}")
     public ResponseEntity<?> saveBook(@RequestBody ProfessionalLiteratureDto dto, @PathVariable Long id){
 
@@ -143,7 +180,13 @@ public class BookController {
         return ResponseEntity.ok(plDto);
     }
     
-    
+    /**
+     * Azurira knjigu iz oblasti fikcije sa datim id-om
+     * 
+     * @param dto DTO beletristike
+     * @param id id knjige
+     * @return azurirani objekat ili poruka o gresci
+     */
     @PatchMapping("/fiction/{id}")
     public ResponseEntity<?> saveBook(@RequestBody FictionDto dto, @PathVariable Long id){
         
@@ -157,6 +200,12 @@ public class BookController {
         return ResponseEntity.ok(fictionDto);
     }
     
+    /**
+     * Vraca knjigu sa datim id-om.
+     * 
+     * @param id id knjige
+     * @return objekat knjige ili poruka o gresci
+     */
     @GetMapping("{id}")
     public ResponseEntity<?> getBook(@PathVariable Long id){
         
@@ -169,6 +218,12 @@ public class BookController {
         return ResponseEntity.ok(obj);
     }
     
+    /**
+     * Brise knjigu sa datim id-om
+     * 
+     * @param id id knjige.
+     * @return poruka o uspesnom brisanju ili gresci
+     */
     @DeleteMapping("{id}")
     public ResponseEntity<?> deleteBook(@PathVariable Long id){
         
@@ -179,10 +234,15 @@ public class BookController {
         
     }
     
+    /**
+     * Pretrazuje knjige po zadatim kriterijumima
+     * 
+     * @param bookDto DTO objekat za pretragu
+     * @return lista knjiga koje zadovoljavaju kriterijume ili poruka o gresci
+     */
     @GetMapping("/search")
     public ResponseEntity<?> getBook(@RequestBody BookDto bookDto){
         
-        System.out.println("bookdto: " + bookDto.toString());
         List<Object> list = bookService.getBooks(bookDto);
         
         if(list.size() == 0)

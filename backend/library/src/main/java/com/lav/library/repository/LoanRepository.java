@@ -11,7 +11,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  *
- * @author Lav
+ * @author Lav Jovanovic
  */
 public interface LoanRepository extends JpaRepository<Loan, Long> {
     

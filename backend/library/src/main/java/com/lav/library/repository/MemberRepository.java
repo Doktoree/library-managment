@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 
 /**
  *
- * @author Lav
+ * @author Lav Jovanovic
  */
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Long> {
