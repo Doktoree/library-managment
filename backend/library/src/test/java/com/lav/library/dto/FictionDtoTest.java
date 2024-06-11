@@ -5,12 +5,15 @@
 package com.lav.library.dto;
 
 import com.lav.library.domain.Author;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+import jakarta.validation.ValidatorFactory;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -19,12 +22,15 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author Lav
  */
 public class FictionDtoTest {
-    
-   FictionDto fictionDto;
+
+    FictionDto fictionDto;
+    private Validator validator;
 
     @BeforeEach
     void setUp() {
         fictionDto = new FictionDto();
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        validator = factory.getValidator();
     }
 
     @AfterEach
@@ -42,7 +48,7 @@ public class FictionDtoTest {
         assertNull(fictionDto.getGenre());
         assertNull(fictionDto.getTheme());
         assertNull(fictionDto.getWonPrizes());
-        assertNull(fictionDto.getAuthors());
+        assertNotNull(fictionDto.getAuthors());
     }
 
     @Test
@@ -53,9 +59,9 @@ public class FictionDtoTest {
         author.setFirstName("Marko");
         author.setLastName("Markovic");
         authors.add(author);
-        
+
         FictionDto fictionDto = new FictionDto(1L, "Test Book", 2022, true, "Genre", "Theme", "Prizes", authors);
-        
+
         assertNotNull(fictionDto);
         assertEquals(1L, fictionDto.getBookId());
         assertEquals("Test Book", fictionDto.getName());
@@ -75,7 +81,7 @@ public class FictionDtoTest {
         author.setFirstName("Marko");
         author.setLastName("Markovic");
         authors.add(author);
-        
+
         fictionDto.setBookId(1L);
         fictionDto.setName("Test Book");
         fictionDto.setYear(2022);
@@ -94,5 +100,58 @@ public class FictionDtoTest {
         assertEquals("Prizes", fictionDto.getWonPrizes());
         assertEquals(authors, fictionDto.getAuthors());
     }
-    
+
+    @Test
+    void testFictionDtoWithInvalidName() {
+        FictionDto fictionDto = new FictionDto(1L, null, 2022, true, "Genre", "Theme", "Prizes", new ArrayList<>());
+
+        Set<ConstraintViolation<FictionDto>> violations = validator.validate(fictionDto);
+        assertFalse(violations.isEmpty());
+        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("name")));
+    }
+
+    @Test
+    void testFictionDtoWithEmptyName() {
+        FictionDto fictionDto = new FictionDto(1L, "", 2022, true, "Genre", "Theme", "Prizes", new ArrayList<>());
+
+        Set<ConstraintViolation<FictionDto>> violations = validator.validate(fictionDto);
+        assertFalse(violations.isEmpty());
+        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("name")));
+    }
+
+    @Test
+    void testFictionDtoWithInvalidGenre() {
+        FictionDto fictionDto = new FictionDto(1L, "Test Book", 2022, true, null, "Theme", "Prizes", new ArrayList<>());
+
+        Set<ConstraintViolation<FictionDto>> violations = validator.validate(fictionDto);
+        assertFalse(violations.isEmpty());
+        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("genre")));
+    }
+
+    @Test
+    void testFictionDtoWithEmptyGenre() {
+        FictionDto fictionDto = new FictionDto(1L, "Test Book", 2022, true, "", "Theme", "Prizes", new ArrayList<>());
+
+        Set<ConstraintViolation<FictionDto>> violations = validator.validate(fictionDto);
+        assertFalse(violations.isEmpty());
+        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("genre")));
+    }
+
+    @Test
+    void testFictionDtoWithInvalidTheme() {
+        FictionDto fictionDto = new FictionDto(1L, "Test Book", 2022, true, "Genre", null, "Prizes", new ArrayList<>());
+
+        Set<ConstraintViolation<FictionDto>> violations = validator.validate(fictionDto);
+        assertFalse(violations.isEmpty());
+        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("theme")));
+    }
+
+    @Test
+    void testFictionDtoWithEmptyTheme() {
+        FictionDto fictionDto = new FictionDto(1L, "Test Book", 2022, true, "Genre", "", "Prizes", new ArrayList<>());
+
+        Set<ConstraintViolation<FictionDto>> violations = validator.validate(fictionDto);
+        assertFalse(violations.isEmpty());
+        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("theme")));
+    }
 }

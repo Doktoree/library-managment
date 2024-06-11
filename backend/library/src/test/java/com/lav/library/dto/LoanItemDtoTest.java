@@ -4,10 +4,12 @@
  */
 package com.lav.library.dto;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.AfterAll;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+import jakarta.validation.ValidatorFactory;
+import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -17,7 +19,15 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class LoanItemDtoTest {
     
+    private Validator validator;
     private LoanItemDto loanItemDto;
+    
+    
+    @BeforeEach
+    public void setUp() {
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        validator = factory.getValidator();
+    }
     
     @Test
     public void testLoanItemDto() {
@@ -50,4 +60,17 @@ public class LoanItemDtoTest {
         assertEquals(expectedToString, loanItemDto.toString());
     }
     
+    @Test
+    public void testBookIdNull(){
+        
+        loanItemDto = new LoanItemDto();
+        loanItemDto.setLoanId(1L);
+        loanItemDto.setStatus("not returned");
+        
+        Set<ConstraintViolation<LoanItemDto>> violations = validator.validate(loanItemDto);
+
+        assertEquals(1, violations.size());
+        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("bookId") && v.getMessage().equals("Book id is required!")));
+    }
+            
 }

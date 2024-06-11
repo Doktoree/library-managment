@@ -4,11 +4,14 @@
  */
 package com.lav.library.dto;
 
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+import jakarta.validation.ValidatorFactory;
 import java.time.LocalDate;
+import java.util.Set;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -17,13 +20,28 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author Lav
  */
 public class MemberDtoTest {
-    
+
     private MemberDto memberDto;
-    
+    private Validator validator;
+
+    @BeforeEach
+    public void setUp() {
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        validator = factory.getValidator();
+        memberDto = new MemberDto();
+    }
+
+    @AfterEach
+    public void tearDown() {
+
+        memberDto = null;
+        validator = null;
+
+    }
+
     @Test
     public void testMemberDto() {
-        memberDto = new MemberDto();
-        
+
         assertNotNull(memberDto);
         assertNull(memberDto.getMemberId());
         assertNull(memberDto.getFirstName());
@@ -32,12 +50,12 @@ public class MemberDtoTest {
         assertNull(memberDto.getPhoneNumber());
         assertNull(memberDto.getBirthDate());
     }
-    
+
     @Test
     public void testMemberDtoWithParameters() {
         LocalDate birthDate = LocalDate.of(1990, 1, 1);
         memberDto = new MemberDto(1L, "Marko", "Markovic", "Adresa 123", "123456789", birthDate);
-        
+
         assertNotNull(memberDto);
         assertEquals(1L, memberDto.getMemberId());
         assertEquals("Marko", memberDto.getFirstName());
@@ -46,48 +64,114 @@ public class MemberDtoTest {
         assertEquals("123456789", memberDto.getPhoneNumber());
         assertEquals(birthDate, memberDto.getBirthDate());
     }
-    
+
     @Test
     public void testSetMemberId() {
-        memberDto = new MemberDto();
         memberDto.setMemberId(1L);
         assertEquals(1L, memberDto.getMemberId());
     }
-    
+
     @Test
     public void testSetFirstName() {
-        memberDto = new MemberDto();
         memberDto.setFirstName("Marko");
         assertEquals("Marko", memberDto.getFirstName());
     }
-    
+
     @Test
     public void testSetLastName() {
-        memberDto = new MemberDto();
         memberDto.setLastName("Markovic");
         assertEquals("Markovic", memberDto.getLastName());
     }
-    
+
     @Test
     public void testSetAdress() {
-        memberDto = new MemberDto();
         memberDto.setAdress("Adresa 123");
         assertEquals("Adresa 123", memberDto.getAdress());
     }
-    
+
     @Test
     public void testSetPhoneNumber() {
-        memberDto = new MemberDto();
         memberDto.setPhoneNumber("123456789");
         assertEquals("123456789", memberDto.getPhoneNumber());
     }
-    
+
     @Test
     public void testSetBirthDate() {
-        memberDto = new MemberDto();
         LocalDate birthDate = LocalDate.of(1990, 1, 1);
         memberDto.setBirthDate(birthDate);
         assertEquals(birthDate, memberDto.getBirthDate());
     }
-    
+
+    @Test
+    public void testInvalidFirstName() {
+        memberDto = new MemberDto(null, "", "Markovic", "Ulica 1", "123456789", LocalDate.now().minusYears(30));
+
+        Set<ConstraintViolation<MemberDto>> violations = validator.validate(memberDto);
+        assertEquals(1, violations.size());
+        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("firstName") && v.getMessage().equals("First name should not be empty!")));
+    }
+
+    @Test
+    public void testInvalidLastName() {
+        memberDto = new MemberDto(null, "Marko", "", "Ulica 1", "123456789", LocalDate.now().minusYears(30));
+
+        Set<ConstraintViolation<MemberDto>> violations = validator.validate(memberDto);
+        assertEquals(1, violations.size());
+        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("lastName") && v.getMessage().equals("Last name should not be empty!")));
+    }
+
+    @Test
+    public void testInvalidAddress() {
+        memberDto = new MemberDto(null, "Marko", "Markovic", "", "123456789", LocalDate.now().minusYears(30));
+
+        Set<ConstraintViolation<MemberDto>> violations = validator.validate(memberDto);
+        assertEquals(1, violations.size());
+        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("adress") && v.getMessage().equals("Adress should not be empty!")));
+    }
+
+    @Test
+    public void testInvalidPhoneNumber() {
+        memberDto = new MemberDto(null, "Marko", "Markovic", "Ulica 1", "", LocalDate.now().minusYears(30));
+
+        Set<ConstraintViolation<MemberDto>> violations = validator.validate(memberDto);
+        assertEquals(1, violations.size());
+        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("phoneNumber") && v.getMessage().equals("Phone number should not be empty!")));
+    }
+
+    @Test
+    public void testInvalidBirthDateInTheFuture() {
+        memberDto = new MemberDto(null, "Marko", "Markovic", "Ulica 1", "123456789", LocalDate.now().plusDays(1));
+
+        Set<ConstraintViolation<MemberDto>> violations = validator.validate(memberDto);
+        assertEquals(1, violations.size());
+        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("birthDate") && v.getMessage().equals("Birth date must be a valid date in the past")));
+    }
+
+    @Test
+    public void testLastNameNull() {
+        memberDto = new MemberDto(null, "Marko", null, "Ulica 1", "123456789", LocalDate.now().minusYears(30));
+
+        Set<ConstraintViolation<MemberDto>> violations = validator.validate(memberDto);
+        assertEquals(2, violations.size());
+        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("lastName") && v.getMessage().equals("Last name is required!")));
+    }
+
+    @Test
+    public void testAddressNull() {
+        memberDto = new MemberDto(1L, "Marko", "Markovic", null, "123456789", LocalDate.now().minusYears(30));
+
+        Set<ConstraintViolation<MemberDto>> violations = validator.validate(memberDto);
+        assertEquals(2, violations.size());
+        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("adress") && v.getMessage().equals("Adress is required!")));
+    }
+
+    @Test
+    public void testPhoneNumberNull() {
+        memberDto = new MemberDto(null, "Marko", "Markovic", "Ulica 1", null, LocalDate.now().minusYears(30));
+
+        Set<ConstraintViolation<MemberDto>> violations = validator.validate(memberDto);
+        assertEquals(2, violations.size());
+        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("phoneNumber") && v.getMessage().equals("Phone number is required!")));
+    }
+
 }
