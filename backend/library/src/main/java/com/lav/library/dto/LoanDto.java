@@ -12,6 +12,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -54,11 +56,14 @@ public class LoanDto {
     /**
      * Jedinstveni identifikator Clana kao Long
      */
+    @NotNull(message = "Member ID is required")
     private Long memberId;
     
     /**
      * Lista stavki zaduzenja ciji elementi su instance klase LoanItemDto
      */
+    @NotNull(message = "Loan items are required")
+    @Size(min = 1, message = "There must be at least one loan item")
     private List<LoanItemDto> loanItems;
     
 }

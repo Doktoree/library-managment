@@ -4,7 +4,14 @@
  */
 package com.lav.library.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.lav.library.domain.Author;
+import jakarta.validation.constraints.AssertTrue;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,11 +39,14 @@ public class ProfessionalLiteratureDto {
     /**
      * Ime knjige kao String
      */
+    @NotNull(message = "Name is required!")
+    @NotEmpty(message = "Name should not be empty!")
     private String name;
     
     /**
      * Godina izdavanja knjige kao int
      */
+    @PositiveOrZero(message = "Year must be a valid number!")
     private int year;
     
     /**
@@ -47,11 +57,20 @@ public class ProfessionalLiteratureDto {
     /**
      * Naucna oblast knjige(strucne literature) kao String
      */
+    @NotNull(message = "Scientific area is required!")
+    @NotEmpty(message = "Scientific area should not be empty!")
     private String scientificArea;
     
     /**
      * Lista autora knjige(strucne literature) ciji elementi su instance klase Author
      */
-    private List<Author> authors;
+    private List<Author> authors = new ArrayList<>();
+    
+    @JsonIgnore
+    @AssertTrue(message = "Year must be a valid number")
+    public boolean isYearValid() {
+        int currentYear = LocalDate.now().getYear();
+        return year >= 0 && year <= currentYear;
+    }
     
 }

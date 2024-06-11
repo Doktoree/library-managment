@@ -8,6 +8,7 @@ import com.lav.library.domain.Member;
 import com.lav.library.dto.LoanDto;
 import com.lav.library.dto.MemberDto;
 import com.lav.library.service.LoanService;
+import jakarta.validation.Valid;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -44,13 +45,7 @@ public class LoanController {
      * @return kreirani objekat ili poruka o gresci
      */
     @PostMapping
-    public ResponseEntity<?> createLoan(@RequestBody LoanDto loanDto) {
-
-        String validateMessage = validateLoanDto(loanDto);
-
-        if (validateMessage != null) {
-            return ResponseEntity.badRequest().body(validateMessage);
-        }
+    public ResponseEntity<?> createLoan(@Valid @RequestBody LoanDto loanDto) {
 
         LoanDto createdLoanDto = loanService.createLoan(loanDto);
 
@@ -60,27 +55,6 @@ public class LoanController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(createdLoanDto);
 
-    }
-
-    /**
-     * Validira DTO objekat zaduzenja
-     * 
-     * @param loanDto DTO zaduzenja
-     * @return poruka o gresci ili null ako je validacija uspesna
-     */
-    private String validateLoanDto(LoanDto loanDto) {
-
-        System.out.println("id: " + loanDto.getMemberId());
-
-        if (loanDto.getLoanItems() == null || loanDto.getMemberId() == null) {
-            return "All fields are required!";
-        }
-
-        if (loanDto.getLoanItems().size() == 0) {
-            return "There must be at least one loan item!";
-        }
-
-        return null;
     }
 
     /**

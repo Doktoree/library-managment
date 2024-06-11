@@ -5,6 +5,9 @@
 package com.lav.library.dto;
 
 import jakarta.persistence.Column;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Past;
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,26 +34,36 @@ public class MemberDto {
     /**
      * Ime autora kao String
      */
+    @NotNull(message = "First name is required!")
+    @NotEmpty(message = "First name should not be empty!")
     private String firstName;
 
     /**
      * Prezime autora kao String
      */
+    @NotNull(message = "Last name is required!")
+    @NotEmpty(message = "Last name should not be empty!")
     private String lastName;
 
     /**
      * Adresa autora kao String
      */
+    @NotNull(message = "Adress is required!")
+    @NotEmpty(message = "Adress should not be empty!")
     private String adress;
 
     /**
      * Broj telefona autora kao String
      */
+    @NotNull(message = "Phone number is required!")
+    @NotEmpty(message = "Phone number should not be empty!")
     private String phoneNumber;
 
     /**
      * Datum rodjenja autora kao LocalDate
      */
+    @NotNull(message = "Birth date is required")
+    @Past(message = "Birth date must be a valid date in the past")
     private LocalDate birthDate;
 
 }

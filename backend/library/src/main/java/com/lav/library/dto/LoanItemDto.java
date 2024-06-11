@@ -4,6 +4,7 @@
  */
 package com.lav.library.dto;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -41,6 +42,7 @@ public class LoanItemDto {
     /**
      * Jedinstveni identifikator Knjige kao Long
      */
+    @NotNull(message = "Book id is required!")
     private Long bookId;
     
 }

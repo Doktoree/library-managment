@@ -6,6 +6,13 @@ package com.lav.library.dto;
 
 import com.lav.library.domain.Author;
 import jakarta.persistence.Column;
+import jakarta.validation.constraints.AssertTrue;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
+import java.time.LocalDate;
+import java.time.Year;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -34,11 +41,14 @@ public class FictionDto {
     /**
      * Ime knjige kao String
      */
+    @NotNull(message = "Name is required!")
+    @NotEmpty(message = "Name should not be empty!")
     private String name;
     
     /**
      * Datum izdavanja knjige kao int
      */
+    @PositiveOrZero(message = "Year must be a valid number!")
     private int year;
     
     /**
@@ -49,16 +59,22 @@ public class FictionDto {
     /**
      * Zanr knjige(beletristike) kao String
      */
+    @NotNull(message = "Genre is required!")
+    @NotEmpty(message = "Genre should not be empty!")
     private String genre;
     
     /**
      * Tema knjige(beletristike) kao String
      */
+    @NotNull(message = "Theme is required!")
+    @NotEmpty(message = "Theme should not be empty!")
     private String theme;
     
     /**
      * Osvojene nagrade knjige(beletristike) kao String
      */
+    @NotNull(message = "Won prizes is required!")
+    @NotEmpty(message = "Won prizes should not be empty!")
     private String wonPrizes;
     
     /**
@@ -66,4 +82,10 @@ public class FictionDto {
      */
     private List<Author> authors;
 
+    
+    @AssertTrue(message = "Year must be a valid number")
+    public boolean isYearValid() {
+        int currentYear = LocalDate.now().getYear();
+        return year >= 0 && year <= currentYear;
+    }
 }

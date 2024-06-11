@@ -14,6 +14,7 @@ import com.lav.library.service.AuthorService;
 import com.lav.library.service.BookService;
 import com.lav.library.service.FictionService;
 import com.lav.library.service.ProfessionalLiteratureService;
+import jakarta.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,223 +33,165 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.function.EntityResponse;
 
 /**
- * Rest kontroler koji upravlja HTTP zahtevima vezanim za knjige
- * Pruza krajnje tačke za kreiranje, dobijanje, azuriranje i brisanje profesionalne literature i beletrisike
- * 
+ * Rest kontroler koji upravlja HTTP zahtevima vezanim za knjige Pruza krajnje
+ * tačke za kreiranje, dobijanje, azuriranje i brisanje profesionalne literature
+ * i beletrisike
+ *
  * @author Lav Jovanovic
  */
 @RestController
 @RequestMapping("/api/book")
 public class BookController {
-    
+
     @Autowired
     private BookService bookService;
-    
+
     @Autowired
     private ProfessionalLiteratureService plService;
-    
+
     @Autowired
     private FictionService fictionService;
-    
+
     @Autowired
     private AuthorService authorService;
-    
+
     /**
      * Vraca sve knjige
-     * 
+     *
      * @return ResponseEntity<?> Lista svih knjiga ili poruka o gresci
      */
     @GetMapping
-    public ResponseEntity<?> getAllBooks(){
-        
+    public ResponseEntity<?> getAllBooks() {
+
         List<BookDto> allBooks = bookService.getAllBooks();
-        
-        if(allBooks.isEmpty())
+
+        if (allBooks.isEmpty()) {
             return ResponseEntity.badRequest().body("There are no books");
-        
+        }
+
         return ResponseEntity.ok(allBooks);
-        
+
     }
-    
+
     /**
      * Kreira novu knjigu iz oblasti strucne literature
+     *
      * @param literatureDto DTO objekat strucne literature
      * @return kreirani objekat ili poruka o gresci
      */
     @PostMapping("/pliterature")
-    public ResponseEntity<?> createBook(@RequestBody ProfessionalLiteratureDto literatureDto){
-        
-        String validateMessage = validate(literatureDto);
-        
-        if(validateMessage != null)
-            return ResponseEntity.badRequest().body(validateMessage);
-        
+    public ResponseEntity<?> createBook(@Valid @RequestBody ProfessionalLiteratureDto literatureDto) {
+
         ProfessionalLiteratureDto createPlDto = plService.createProfessionalLiterature(literatureDto);
-        
+
         return ResponseEntity.status(HttpStatus.CREATED).body(createPlDto);
     }
-    
+
     /**
      * Kreira novu knjigu iz oblasti beletristike
-     * 
+     *
      * @param fictionDto DTO objekat beletristike
      * @return kreirani objekat ili poruka o gresci
      */
     @PostMapping("/fiction")
-    public ResponseEntity<?> createBook(@RequestBody FictionDto fictionDto){
-        
-        String validateMessage = validate(fictionDto);
-        
-        if(validateMessage != null)
-            return ResponseEntity.badRequest().body(validateMessage);
-        
+    public ResponseEntity<?> createBook(@Valid @RequestBody FictionDto fictionDto) {
+
         FictionDto createFictionDto = fictionService.createFiction(fictionDto);
-        
+
         return ResponseEntity.status(HttpStatus.CREATED).body(createFictionDto);
     }
-    
-    /**
-     * Validira DTO objekat strucne literature
-     * 
-     * @param dto DTO strucne literature
-     * @return poruka o gresci ili null ako je validacija uspesna
-     */
-    private String validate(ProfessionalLiteratureDto dto){
-        
-        if(dto.getName() == null || dto.getScientificArea() == null)
-            return "All fields are required!";
-        
-        if(dto.getName().isEmpty() || !(dto.getName() instanceof String))
-            return "Name should not be empty!";
-            
-        if(dto.getYear() < 0 || dto.getYear() > LocalDate.now().getYear())
-            return "Year must be a valid number!";
-            
-        if(dto.getScientificArea().isEmpty() || !(dto.getScientificArea() instanceof String))
-            return "Scientific area should not be empty!";
-        
-        return null;
-    }
-    
-    /**
-     * Validira DTO objekat beletristike
-     * 
-     * @param dto DTO beletristike
-     * @return poruka o gresci ili null ako je validacija uspesna
-     */
-    private String validate(FictionDto dto){
-        
-        if(dto.getName() == null || dto.getGenre()== null || dto.getTheme() == null || dto.getWonPrizes() == null)
-            return "All fields are required!";
-        
-        if(dto.getName().isEmpty() || !(dto.getName() instanceof String))
-            return "Name should not be empty!";
-            
-        if(dto.getYear() < 0 || dto.getYear() > LocalDate.now().getYear())
-            return "Year must be a valid number!";
-            
-        if(dto.getGenre().isEmpty() || !(dto.getGenre()instanceof String))
-            return "Genre should not be empty!";
-        
-        if(dto.getTheme().isEmpty() || !(dto.getTheme()instanceof String))
-            return "Theme should not be empty!";
-        
-        if(dto.getWonPrizes().isEmpty() || !(dto.getWonPrizes()instanceof String))
-            return "Won prizes should not be empty!";
-        
-        return null;
-    }
-    
+
+
     /**
      * Azurira knjigu iz oblasti strucne literature sa datim id-om
-     * 
+     *
      * @param dto DTO strucne literature
      * @param id id knjige
      * @return azurirani objekat ili poruka o gresci
      */
     @PatchMapping("/pliterature/{id}")
-    public ResponseEntity<?> saveBook(@RequestBody ProfessionalLiteratureDto dto, @PathVariable Long id){
+    public ResponseEntity<?> saveBook(@RequestBody ProfessionalLiteratureDto dto, @PathVariable Long id) {
 
-        
         ProfessionalLiteratureDto plDto = plService.saveProfessionalLiterature(id, dto);
-        
 
         if (plDto == null) {
             return ResponseEntity.badRequest().body("There is no book with the given ID!");
         }
-        
+
         return ResponseEntity.ok(plDto);
     }
-    
+
     /**
      * Azurira knjigu iz oblasti fikcije sa datim id-om
-     * 
+     *
      * @param dto DTO beletristike
      * @param id id knjige
      * @return azurirani objekat ili poruka o gresci
      */
     @PatchMapping("/fiction/{id}")
-    public ResponseEntity<?> saveBook(@RequestBody FictionDto dto, @PathVariable Long id){
-        
+    public ResponseEntity<?> saveBook(@RequestBody FictionDto dto, @PathVariable Long id) {
+
         FictionDto fictionDto = fictionService.saveFiction(id, dto);
-        
 
         if (fictionDto == null) {
             return ResponseEntity.badRequest().body("There is no book with the given ID!");
         }
-        
+
         return ResponseEntity.ok(fictionDto);
     }
-    
+
     /**
      * Vraca knjigu sa datim id-om.
-     * 
+     *
      * @param id id knjige
      * @return objekat knjige ili poruka o gresci
      */
     @GetMapping("{id}")
-    public ResponseEntity<?> getBook(@PathVariable Long id){
-        
+    public ResponseEntity<?> getBook(@PathVariable Long id) {
+
         List<Author> authors = authorService.getAuthorsByBookId(id);
         Object obj = bookService.getBook(id, authors);
-        
-        if(obj == null)
+
+        if (obj == null) {
             return ResponseEntity.badRequest().body("There is no book with the given ID!");
-        
+        }
+
         return ResponseEntity.ok(obj);
     }
-    
+
     /**
      * Brise knjigu sa datim id-om
-     * 
+     *
      * @param id id knjige.
      * @return poruka o uspesnom brisanju ili gresci
      */
     @DeleteMapping("{id}")
-    public ResponseEntity<?> deleteBook(@PathVariable Long id){
-        
-        if(bookService.deleteBook(id) == false)
+    public ResponseEntity<?> deleteBook(@PathVariable Long id) {
+
+        if (bookService.deleteBook(id) == false) {
             return ResponseEntity.badRequest().body("There is no book with the given ID!");
-        
+        }
+
         return ResponseEntity.ok("Book is succesfully deleted!");
-        
+
     }
-    
+
     /**
      * Pretrazuje knjige po zadatim kriterijumima
-     * 
+     *
      * @param bookDto DTO objekat za pretragu
      * @return lista knjiga koje zadovoljavaju kriterijume ili poruka o gresci
      */
     @GetMapping("/search")
-    public ResponseEntity<?> getBook(@RequestBody BookDto bookDto){
-        
+    public ResponseEntity<?> getBook(@RequestBody BookDto bookDto) {
+
         List<Object> list = bookService.getBooks(bookDto);
-        
-        if(list.size() == 0)
+
+        if (list.size() == 0) {
             return ResponseEntity.badRequest().body("There are no books matching the given criteria!");
-        
+        }
+
         return ResponseEntity.ok(list);
-        
+
     }
 }
