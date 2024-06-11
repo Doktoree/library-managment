@@ -40,7 +40,7 @@ public class LoanItemDto {
     private String status = "not returned";
     
     /**
-     * Jedinstveni identifikator Knjige kao Long
+     * Jedinstveni identifikator Knjige kao Long, ne sme biti null
      */
     @NotNull(message = "Book id is required!")
     private Long bookId;

@@ -32,35 +32,35 @@ public class MemberDto {
     private Long memberId;
 
     /**
-     * Ime autora kao String
+     * Ime autora kao String, ne sme biti null i ne sme biti prazan String
      */
     @NotNull(message = "First name is required!")
     @NotEmpty(message = "First name should not be empty!")
     private String firstName;
 
     /**
-     * Prezime autora kao String
+     * Prezime autora kao String, ne sme biti null i ne sme biti prazan String
      */
     @NotNull(message = "Last name is required!")
     @NotEmpty(message = "Last name should not be empty!")
     private String lastName;
 
     /**
-     * Adresa autora kao String
+     * Adresa autora kao String, ne sme biti null i ne sme biti prazan String
      */
     @NotNull(message = "Adress is required!")
     @NotEmpty(message = "Adress should not be empty!")
     private String adress;
 
     /**
-     * Broj telefona autora kao String
+     * Broj telefona autora kao String, ne sme biti null i ne sme biti prazan String
      */
     @NotNull(message = "Phone number is required!")
     @NotEmpty(message = "Phone number should not be empty!")
     private String phoneNumber;
 
     /**
-     * Datum rodjenja autora kao LocalDate
+     * Datum rodjenja autora kao LocalDate, ne sme biti null i ne sme biti datum u buducnosti
      */
     @NotNull(message = "Birth date is required")
     @Past(message = "Birth date must be a valid date in the past")

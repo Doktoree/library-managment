@@ -4,6 +4,7 @@
  */
 package com.lav.library.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.lav.library.domain.Author;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.AssertTrue;
@@ -13,6 +14,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import java.time.LocalDate;
 import java.time.Year;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -39,7 +41,7 @@ public class FictionDto {
     private Long bookId;
     
     /**
-     * Ime knjige kao String
+     * Ime knjige kao String, ne sme biti null i sme biti prazan String
      */
     @NotNull(message = "Name is required!")
     @NotEmpty(message = "Name should not be empty!")
@@ -48,7 +50,6 @@ public class FictionDto {
     /**
      * Datum izdavanja knjige kao int
      */
-    @PositiveOrZero(message = "Year must be a valid number!")
     private int year;
     
     /**
@@ -57,21 +58,21 @@ public class FictionDto {
     private boolean isTaken;
     
     /**
-     * Zanr knjige(beletristike) kao String
+     * Zanr knjige(beletristike) kao String, ne sme biti null i ne sme biti prazan String
      */
     @NotNull(message = "Genre is required!")
     @NotEmpty(message = "Genre should not be empty!")
     private String genre;
     
     /**
-     * Tema knjige(beletristike) kao String
+     * Tema knjige(beletristike) kao String, ne sme biti null i ne sme biti prazan String
      */
     @NotNull(message = "Theme is required!")
     @NotEmpty(message = "Theme should not be empty!")
     private String theme;
     
     /**
-     * Osvojene nagrade knjige(beletristike) kao String
+     * Osvojene nagrade knjige(beletristike) kao String, ne sme biti null i ne sme biti prazan String
      */
     @NotNull(message = "Won prizes is required!")
     @NotEmpty(message = "Won prizes should not be empty!")
@@ -80,9 +81,16 @@ public class FictionDto {
     /**
      * Lista autora ciji elementi su instance klase Author
      */
-    private List<Author> authors;
+    private List<Author> authors = new ArrayList<>();
 
-    
+    /**
+     * Proverava validnost godine izdavanja knjige
+     * 
+     * @return boolean True ako je godina veca ili jednako od nula i ako je godina manja od trenutne godine,
+     * False u ostalim slucajevima
+     * 
+     */
+    @JsonIgnore
     @AssertTrue(message = "Year must be a valid number")
     public boolean isYearValid() {
         int currentYear = LocalDate.now().getYear();

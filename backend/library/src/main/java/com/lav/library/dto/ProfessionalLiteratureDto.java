@@ -37,7 +37,7 @@ public class ProfessionalLiteratureDto {
     private Long bookId;
     
     /**
-     * Ime knjige kao String
+     * Ime knjige kao String, ne sme biti null i ne sme biti prazan String
      */
     @NotNull(message = "Name is required!")
     @NotEmpty(message = "Name should not be empty!")
@@ -46,7 +46,6 @@ public class ProfessionalLiteratureDto {
     /**
      * Godina izdavanja knjige kao int
      */
-    @PositiveOrZero(message = "Year must be a valid number!")
     private int year;
     
     /**
@@ -55,7 +54,7 @@ public class ProfessionalLiteratureDto {
     private boolean isTaken;
     
     /**
-     * Naucna oblast knjige(strucne literature) kao String
+     * Naucna oblast knjige(strucne literature) kao String,, ne sme biti null i ne sme biti prazan String
      */
     @NotNull(message = "Scientific area is required!")
     @NotEmpty(message = "Scientific area should not be empty!")
@@ -66,6 +65,13 @@ public class ProfessionalLiteratureDto {
      */
     private List<Author> authors = new ArrayList<>();
     
+    /**
+     * Proverava validnost godine izdavanja knjige
+     * 
+     * @return boolean True ako je godina veca ili jednako od nula i ako je godina manja od trenutne godine,
+     * False u ostalim slucajevima
+     * 
+     */
     @JsonIgnore
     @AssertTrue(message = "Year must be a valid number")
     public boolean isYearValid() {

@@ -54,13 +54,13 @@ public class LoanDto {
     private LocalDateTime endDateOfLoan = startDateOfLoan.plusDays(20);
     
     /**
-     * Jedinstveni identifikator Clana kao Long
+     * Jedinstveni identifikator Clana kao Long, ne sme biti null
      */
     @NotNull(message = "Member ID is required")
     private Long memberId;
     
     /**
-     * Lista stavki zaduzenja ciji elementi su instance klase LoanItemDto
+     * Lista stavki zaduzenja ciji elementi su instance klase LoanItemDto, ne sme biti null i ne sme biti prazna lista
      */
     @NotNull(message = "Loan items are required")
     @Size(min = 1, message = "There must be at least one loan item")
