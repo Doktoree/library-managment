@@ -39,8 +39,7 @@ public class ProfessionalLiteratureDto {
     /**
      * Ime knjige kao String, ne sme biti null i ne sme biti prazan String
      */
-    @NotNull(message = "Name is required!")
-    @NotEmpty(message = "Name should not be empty!")
+    @NotEmpty(message = "Name is required!")
     private String name;
     
     /**
@@ -56,8 +55,7 @@ public class ProfessionalLiteratureDto {
     /**
      * Naucna oblast knjige(strucne literature) kao String,, ne sme biti null i ne sme biti prazan String
      */
-    @NotNull(message = "Scientific area is required!")
-    @NotEmpty(message = "Scientific area should not be empty!")
+    @NotEmpty(message = "Scientific area is required!")
     private String scientificArea;
     
     /**

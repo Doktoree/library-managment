@@ -43,8 +43,7 @@ public class FictionDto {
     /**
      * Ime knjige kao String, ne sme biti null i sme biti prazan String
      */
-    @NotNull(message = "Name is required!")
-    @NotEmpty(message = "Name should not be empty!")
+    @NotEmpty(message = "Name is required!")
     private String name;
     
     /**
@@ -60,22 +59,19 @@ public class FictionDto {
     /**
      * Zanr knjige(beletristike) kao String, ne sme biti null i ne sme biti prazan String
      */
-    @NotNull(message = "Genre is required!")
-    @NotEmpty(message = "Genre should not be empty!")
+    @NotEmpty(message = "Genre is required!")
     private String genre;
     
     /**
      * Tema knjige(beletristike) kao String, ne sme biti null i ne sme biti prazan String
      */
-    @NotNull(message = "Theme is required!")
-    @NotEmpty(message = "Theme should not be empty!")
+    @NotEmpty(message = "Theme is required!")
     private String theme;
     
     /**
      * Osvojene nagrade knjige(beletristike) kao String, ne sme biti null i ne sme biti prazan String
      */
-    @NotNull(message = "Won prizes is required!")
-    @NotEmpty(message = "Won prizes should not be empty!")
+    @NotEmpty(message = "Won prizes is required!")
     private String wonPrizes;
     
     /**

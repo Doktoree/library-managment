@@ -34,29 +34,25 @@ public class MemberDto {
     /**
      * Ime autora kao String, ne sme biti null i ne sme biti prazan String
      */
-    @NotNull(message = "First name is required!")
-    @NotEmpty(message = "First name should not be empty!")
+    @NotEmpty(message = "First name is required!")
     private String firstName;
 
     /**
      * Prezime autora kao String, ne sme biti null i ne sme biti prazan String
      */
-    @NotNull(message = "Last name is required!")
-    @NotEmpty(message = "Last name should not be empty!")
+    @NotEmpty(message = "Last name is required!")
     private String lastName;
 
     /**
      * Adresa autora kao String, ne sme biti null i ne sme biti prazan String
      */
-    @NotNull(message = "Adress is required!")
-    @NotEmpty(message = "Adress should not be empty!")
+    @NotEmpty(message = "Adress is required!")
     private String adress;
 
     /**
      * Broj telefona autora kao String, ne sme biti null i ne sme biti prazan String
      */
-    @NotNull(message = "Phone number is required!")
-    @NotEmpty(message = "Phone number should not be empty!")
+    @NotEmpty(message = "Phone number is required!")
     private String phoneNumber;
 
     /**
