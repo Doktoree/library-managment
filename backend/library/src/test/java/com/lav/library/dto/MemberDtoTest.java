@@ -108,7 +108,7 @@ public class MemberDtoTest {
 
         Set<ConstraintViolation<MemberDto>> violations = validator.validate(memberDto);
         assertEquals(1, violations.size());
-        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("firstName") && v.getMessage().equals("First name should not be empty!")));
+        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("firstName") && v.getMessage().equals("First name is required!")));
     }
 
     @Test
@@ -117,7 +117,7 @@ public class MemberDtoTest {
 
         Set<ConstraintViolation<MemberDto>> violations = validator.validate(memberDto);
         assertEquals(1, violations.size());
-        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("lastName") && v.getMessage().equals("Last name should not be empty!")));
+        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("lastName") && v.getMessage().equals("Last name is required!")));
     }
 
     @Test
@@ -126,7 +126,7 @@ public class MemberDtoTest {
 
         Set<ConstraintViolation<MemberDto>> violations = validator.validate(memberDto);
         assertEquals(1, violations.size());
-        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("adress") && v.getMessage().equals("Adress should not be empty!")));
+        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("adress") && v.getMessage().equals("Adress is required!")));
     }
 
     @Test
@@ -135,7 +135,7 @@ public class MemberDtoTest {
 
         Set<ConstraintViolation<MemberDto>> violations = validator.validate(memberDto);
         assertEquals(1, violations.size());
-        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("phoneNumber") && v.getMessage().equals("Phone number should not be empty!")));
+        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("phoneNumber") && v.getMessage().equals("Phone number is required!")));
     }
 
     @Test
@@ -148,11 +148,20 @@ public class MemberDtoTest {
     }
 
     @Test
+    public void testFirstNameNull() {
+        memberDto = new MemberDto(null, null, "Markovic", "Ulica 1", "123456789", LocalDate.now().minusYears(30));
+
+        Set<ConstraintViolation<MemberDto>> violations = validator.validate(memberDto);
+        assertEquals(1, violations.size());
+        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("firstName") && v.getMessage().equals("First name is required!")));
+    }
+
+    @Test
     public void testLastNameNull() {
         memberDto = new MemberDto(null, "Marko", null, "Ulica 1", "123456789", LocalDate.now().minusYears(30));
 
         Set<ConstraintViolation<MemberDto>> violations = validator.validate(memberDto);
-        assertEquals(2, violations.size());
+        assertEquals(1, violations.size());
         assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("lastName") && v.getMessage().equals("Last name is required!")));
     }
 
@@ -161,7 +170,7 @@ public class MemberDtoTest {
         memberDto = new MemberDto(1L, "Marko", "Markovic", null, "123456789", LocalDate.now().minusYears(30));
 
         Set<ConstraintViolation<MemberDto>> violations = validator.validate(memberDto);
-        assertEquals(2, violations.size());
+        assertEquals(1, violations.size());
         assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("adress") && v.getMessage().equals("Adress is required!")));
     }
 
@@ -170,8 +179,17 @@ public class MemberDtoTest {
         memberDto = new MemberDto(null, "Marko", "Markovic", "Ulica 1", null, LocalDate.now().minusYears(30));
 
         Set<ConstraintViolation<MemberDto>> violations = validator.validate(memberDto);
-        assertEquals(2, violations.size());
+        assertEquals(1, violations.size());
         assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("phoneNumber") && v.getMessage().equals("Phone number is required!")));
+    }
+    
+    @Test
+    public void testBirthDateNull() {
+        memberDto = new MemberDto(null, "Marko", "Markovic", "Ulica 1", "123456789", null);
+
+        Set<ConstraintViolation<MemberDto>> violations = validator.validate(memberDto);
+        assertEquals(1, violations.size());
+        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("birthDate") && v.getMessage().equals("Birth date is required")));
     }
 
 }

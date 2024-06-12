@@ -9,6 +9,7 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -103,55 +104,93 @@ public class FictionDtoTest {
 
     @Test
     void testFictionDtoWithInvalidName() {
-        FictionDto fictionDto = new FictionDto(1L, null, 2022, true, "Genre", "Theme", "Prizes", new ArrayList<>());
+        fictionDto = new FictionDto(1L, null, 2022, true, "Genre", "Theme", "Prizes", new ArrayList<>());
 
         Set<ConstraintViolation<FictionDto>> violations = validator.validate(fictionDto);
-        assertFalse(violations.isEmpty());
-        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("name")));
+        assertEquals(1, violations.size());
+        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("name") && v.getMessage().equals("Name is required!")));
     }
 
     @Test
     void testFictionDtoWithEmptyName() {
-        FictionDto fictionDto = new FictionDto(1L, "", 2022, true, "Genre", "Theme", "Prizes", new ArrayList<>());
+        fictionDto = new FictionDto(1L, "", 2022, true, "Genre", "Theme", "Prizes", new ArrayList<>());
 
         Set<ConstraintViolation<FictionDto>> violations = validator.validate(fictionDto);
-        assertFalse(violations.isEmpty());
-        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("name")));
+        assertEquals(1, violations.size());
+        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("name") && v.getMessage().equals("Name is required!")));
     }
 
     @Test
     void testFictionDtoWithInvalidGenre() {
-        FictionDto fictionDto = new FictionDto(1L, "Test Book", 2022, true, null, "Theme", "Prizes", new ArrayList<>());
+        fictionDto = new FictionDto(1L, "Test Book", 2022, true, null, "Theme", "Prizes", new ArrayList<>());
 
         Set<ConstraintViolation<FictionDto>> violations = validator.validate(fictionDto);
-        assertFalse(violations.isEmpty());
-        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("genre")));
+        assertEquals(1, violations.size());
+        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("genre") && v.getMessage().equals("Genre is required!")));
     }
 
     @Test
     void testFictionDtoWithEmptyGenre() {
-        FictionDto fictionDto = new FictionDto(1L, "Test Book", 2022, true, "", "Theme", "Prizes", new ArrayList<>());
+        fictionDto = new FictionDto(1L, "Test Book", 2022, true, "", "Theme", "Prizes", new ArrayList<>());
 
         Set<ConstraintViolation<FictionDto>> violations = validator.validate(fictionDto);
-        assertFalse(violations.isEmpty());
-        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("genre")));
+        assertEquals(1, violations.size());
+        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("genre") && v.getMessage().equals("Genre is required!")));
     }
 
     @Test
     void testFictionDtoWithInvalidTheme() {
-        FictionDto fictionDto = new FictionDto(1L, "Test Book", 2022, true, "Genre", null, "Prizes", new ArrayList<>());
+        fictionDto = new FictionDto(1L, "Test Book", 2022, true, "Genre", null, "Prizes", new ArrayList<>());
 
         Set<ConstraintViolation<FictionDto>> violations = validator.validate(fictionDto);
-        assertFalse(violations.isEmpty());
-        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("theme")));
+        assertEquals(1, violations.size());
+        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("theme") && v.getMessage().equals("Theme is required!")));
     }
 
     @Test
     void testFictionDtoWithEmptyTheme() {
-        FictionDto fictionDto = new FictionDto(1L, "Test Book", 2022, true, "Genre", "", "Prizes", new ArrayList<>());
+        fictionDto = new FictionDto(1L, "Test Book", 2022, true, "Genre", "", "Prizes", new ArrayList<>());
 
         Set<ConstraintViolation<FictionDto>> violations = validator.validate(fictionDto);
-        assertFalse(violations.isEmpty());
-        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("theme")));
+        assertEquals(1, violations.size());
+        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("theme") && v.getMessage().equals("Theme is required!")));
+    }
+
+    @Test
+    void testFictionDtoWithInvalidWonPrizes() {
+        fictionDto = new FictionDto(1L, "Test Book", 2022, true, "Genre", "Theme", null, new ArrayList<>());
+
+        Set<ConstraintViolation<FictionDto>> violations = validator.validate(fictionDto);
+        assertEquals(1, violations.size());
+        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("wonPrizes") && v.getMessage().equals("Won prizes is required!")));
+    }
+
+    @Test
+    void testFictionDtoWithEmptyWonPrizes() {
+        fictionDto = new FictionDto(1L, "Test Book", 2022, true, "Genre", "Theme", "", new ArrayList<>());
+
+        Set<ConstraintViolation<FictionDto>> violations = validator.validate(fictionDto);
+        assertEquals(1, violations.size());
+        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("wonPrizes") && v.getMessage().equals("Won prizes is required!")));
+    }
+    
+    @Test
+    public void testYearValidCurrentYear() {
+        int currentYear = LocalDate.now().getYear();
+        fictionDto.setYear(currentYear);
+        assertTrue(fictionDto.isYearValid(), "Year must be a valid number");
+    }
+
+    @Test
+    public void testYearValidPastYear() {
+        fictionDto.setYear(1990);
+        assertTrue(fictionDto.isYearValid(), "Year must be a valid number");
+    }
+
+    @Test
+    public void testYearInvalidFutureYear() {
+        int futureYear = LocalDate.now().getYear() + 1;
+        fictionDto.setYear(futureYear);
+        assertFalse(fictionDto.isYearValid(), "Year must be a valid number");
     }
 }

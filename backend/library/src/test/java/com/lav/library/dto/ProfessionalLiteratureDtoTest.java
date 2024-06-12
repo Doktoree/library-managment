@@ -9,9 +9,11 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -26,12 +28,19 @@ public class ProfessionalLiteratureDtoTest {
     private Validator validator;
 
     @BeforeEach
-    void setUp() {
-        professionalLiteratureDto = new ProfessionalLiteratureDto();
+    void setUp() {      
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         validator = factory.getValidator();
+        professionalLiteratureDto = new ProfessionalLiteratureDto();
     }
 
+    @AfterEach
+    void tearDown(){
+        validator = null;
+        professionalLiteratureDto = null;
+        
+    }
+    
     @Test
     public void testNoArgsConstructor() {
         professionalLiteratureDto = new ProfessionalLiteratureDto();
@@ -98,50 +107,29 @@ public class ProfessionalLiteratureDtoTest {
 
     @Test
     void testProfessionalLiteratureDtoWithInvalidName() {
-        ProfessionalLiteratureDto professionalLiteratureDto = new ProfessionalLiteratureDto(1L, null, 2022, true, "Scientific Area", new ArrayList<>());
+         professionalLiteratureDto = new ProfessionalLiteratureDto(1L, null, 2022, true, "Scientific Area", new ArrayList<>());
 
         Set<ConstraintViolation<ProfessionalLiteratureDto>> violations = validator.validate(professionalLiteratureDto);
-        assertFalse(violations.isEmpty());
-        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("name")));
+        assertEquals(1, violations.size());
+        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("name") && v.getMessage().equals("Name is required!")));
     }
 
     @Test
     void testProfessionalLiteratureDtoWithEmptyName() {
-        ProfessionalLiteratureDto professionalLiteratureDto = new ProfessionalLiteratureDto(1L, "", 2022, true, "Scientific Area", new ArrayList<>());
+         professionalLiteratureDto = new ProfessionalLiteratureDto(1L, "", 2022, true, "Scientific Area", new ArrayList<>());
 
         Set<ConstraintViolation<ProfessionalLiteratureDto>> violations = validator.validate(professionalLiteratureDto);
-        assertFalse(violations.isEmpty());
-        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("name")));
-    }
-
-    @Test
-    void testIsYearValidWithValidYear() {
-        professionalLiteratureDto.setYear(2020);
-
-        assertTrue(professionalLiteratureDto.isYearValid());
-    }
-
-    @Test
-    void testIsYearValidWithNegativeYear() {
-        professionalLiteratureDto.setYear(-1);
-
-        assertFalse(professionalLiteratureDto.isYearValid());
-    }
-
-    @Test
-    void testIsYearValidWithFutureYear() {
-        professionalLiteratureDto.setYear(2050);
-
-        assertFalse(professionalLiteratureDto.isYearValid());
+        assertEquals(1, violations.size());
+        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("name") && v.getMessage().equals("Name is required!")));
     }
 
     @Test
     void testProfessionalLiteratureDtoWithInvalidScientificArea() {
-        ProfessionalLiteratureDto professionalLiteratureDto = new ProfessionalLiteratureDto(1L, "Book Name", 2022, true, null, new ArrayList<>());
+         professionalLiteratureDto = new ProfessionalLiteratureDto(1L, "Book Name", 2022, true, null, new ArrayList<>());
 
         Set<ConstraintViolation<ProfessionalLiteratureDto>> violations = validator.validate(professionalLiteratureDto);
-        assertFalse(violations.isEmpty());
-        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("scientificArea")));
+        assertEquals(1, violations.size());
+        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("scientificArea") && v.getMessage().equals("Scientific area is required!")));
     }
 
     @Test
@@ -149,8 +137,28 @@ public class ProfessionalLiteratureDtoTest {
         ProfessionalLiteratureDto professionalLiteratureDto = new ProfessionalLiteratureDto(1L, "Book Name", 2022, true, "", new ArrayList<>());
 
         Set<ConstraintViolation<ProfessionalLiteratureDto>> violations = validator.validate(professionalLiteratureDto);
-        assertFalse(violations.isEmpty());
-        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("scientificArea")));
+        assertEquals(1, violations.size());
+        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("scientificArea") && v.getMessage().equals("Scientific area is required!")));
+    }
+    
+    @Test
+    public void testYearValidCurrentYear() {
+        int currentYear = LocalDate.now().getYear();
+        professionalLiteratureDto.setYear(currentYear);
+        assertTrue(professionalLiteratureDto.isYearValid(), "Year must be a valid number");
+    }
+
+    @Test
+    public void testYearValidPastYear() {
+        professionalLiteratureDto.setYear(1990);
+        assertTrue(professionalLiteratureDto.isYearValid(), "Year must be a valid number");
+    }
+
+    @Test
+    public void testYearInvalidFutureYear() {
+        int futureYear = LocalDate.now().getYear() + 1;
+        professionalLiteratureDto.setYear(futureYear);
+        assertFalse(professionalLiteratureDto.isYearValid(), "Year must be a valid number");
     }
 
 }
